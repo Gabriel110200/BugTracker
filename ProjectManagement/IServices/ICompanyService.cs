@@ -7,22 +7,22 @@ namespace ProjectManagement.IServices
 {
     public interface ICompanyService
     {
-        public Task<List<Company>> ListAllCompanies();
+         Task<List<Company>> ListAllCompanies();
 
-        public Task<bool> Create(Company company);
+         Task<bool> Create(Company company,ApplicationUser user);
 
-        public Task<bool> Update(Company company);
-
-
-        public Task<Company> Get(Guid id);
-
-        public Task<List<ApplicationUser>> ListAdmins();
+         Task<bool> Update(Company company);
 
 
-        public Task<bool> RegisterUser();
+         Task<Company> Get(Guid id);
+
+         Task<List<ApplicationUser>> ListAdmins();
 
 
-        public Task<bool> Delete(Guid id); 
+         Task<bool> RegisterAdmins(Guid CompanyId, ApplicationUser User);
+
+
+         Task<bool> Delete(Guid id); 
 
 
 

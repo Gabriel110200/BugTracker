@@ -17,6 +17,8 @@ namespace ProjectManagement.Models
 
         public string? Description { get; set; }
 
+        public List<ApplicationUser> Admins { get; set; }
+
         public List<Team>? Teams { get; set; }
 
 
