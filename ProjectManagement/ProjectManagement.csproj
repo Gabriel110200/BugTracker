@@ -6,6 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Migrations\20221029001007_project.cs" />
+    <Compile Remove="Data\Migrations\20221029001007_project.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221029001708_project.cs" />
+    <Compile Remove="Data\Migrations\20221029001708_project.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221029001857_project.cs" />
+    <Compile Remove="Data\Migrations\20221029001857_project.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.23" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.23" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.23" />
