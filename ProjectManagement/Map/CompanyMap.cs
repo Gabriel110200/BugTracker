@@ -18,6 +18,14 @@ namespace ProjectManagement.Map
                    .HasColumnType("varchar(30)")
                    .IsRequired();
 
+            builder.Property(x => x.CNPJ)
+                   .HasColumnType("varchar(100)")
+                   .IsRequired();
+
+            builder.Property(x => x.CorporateName)
+                    .HasColumnType("varchar(50)")
+                    .IsRequired();
+
             builder.Property(x => x.Description)
                     .HasColumnType("varchar(50)");
 
