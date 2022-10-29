@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectManagement.Enum;
+using System;
 
 namespace ProjectManagement.Models
 {
@@ -9,12 +10,12 @@ namespace ProjectManagement.Models
 
         public string Title { get; set; }
 
-        //public Enum Priority { get; set; }
+        public TicketPriority Priority { get; set; }
 
-        //public Enum Status { get; set; }
+        public TicketStatusEnum Status { get; set; }
 
 
-        //public Enum Type { get; set; }
+        public TicketTypeEnum Type { get; set; }
 
 
         public string Message { get; set; }
