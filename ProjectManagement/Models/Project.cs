@@ -24,6 +24,8 @@ namespace ProjectManagement.Models
 
         public List<Team> Team { get; set; }
 
+        public List<Ticket> Tickets { get; set; }
+
 
 
     }
