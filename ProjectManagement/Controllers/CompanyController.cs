@@ -17,6 +17,7 @@ namespace ProjectManagement.Controllers
 
         }
 
+        [HttpPost("/[Controller]/[Action]")]
 
         public async Task<IActionResult> CreateCompany(Company company, ApplicationUser User)
         {
@@ -26,14 +27,15 @@ namespace ProjectManagement.Controllers
 
         }
 
+
+        [HttpGet("/[Controller]/[Action]/{id}")]
+
         public async Task<IActionResult> Delete(Guid Id)
         {
 
             var wasCompanyDeleted = await _company.Delete(Id);
 
             return NoContent();
-
-
         }
 
 

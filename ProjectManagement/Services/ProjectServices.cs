@@ -106,13 +106,10 @@ namespace ProjectManagement.Services
             var mediumMean = mediumPriorityTicketsNumber / tickets.Count;
             var lowMean = lowPriorityTicketsNumber / tickets.Count;
 
-
-
             dict.Add("Urgentes", urgentMean);
             dict.Add("Alta prioridade", urgentMean);
             dict.Add("Média prioridade ", urgentMean);
             dict.Add("Baixa prioridade", urgentMean);
-
 
 
             return dict; 
