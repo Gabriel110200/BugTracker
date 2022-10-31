@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data;
+using ProjectManagement.Data.Migrations;
 using ProjectManagement.IServices;
 using ProjectManagement.Models;
 using System;
+using System.ComponentModel.Design;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.Controllers
@@ -50,6 +53,17 @@ namespace ProjectManagement.Controllers
 
             return Ok(_project.UrgentPriorityArithmeticMean(project));
 
+
+        }
+
+
+        [HttpGet("/[Controller]/Action")]
+
+        public  IActionResult Delete(Guid projectId)
+        {
+            var isProjectDeleted =  _project.Delete(projectId);
+
+            return NoContent();
 
         }
 
