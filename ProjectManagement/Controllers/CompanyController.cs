@@ -1,10 +1,12 @@
-﻿using ProjectManagement.IServices;
+﻿using Microsoft.AspNetCore.Mvc;
+using ProjectManagement.IServices;
 using ProjectManagement.Models;
+using System;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.Controllers
 {
-    public class CompanyController
+    public class CompanyController : Controller
     {
 
         private ICompanyService _company;
@@ -16,10 +18,21 @@ namespace ProjectManagement.Controllers
         }
 
 
-        public async Task<bool> CreateCompany(Company company, ApplicationUser User)
+        public async Task<IActionResult> CreateCompany(Company company, ApplicationUser User)
         {
             var isCompanyCreated = await _company.Create(company,User);
-            return isCompanyCreated;
+
+            return Created(string.Empty,isCompanyCreated);
+
+        }
+
+        public async Task<IActionResult> Delete(Guid Id)
+        {
+
+            var wasCompanyDeleted = await _company.Delete(Id);
+
+            return NoContent();
+
 
         }
 
