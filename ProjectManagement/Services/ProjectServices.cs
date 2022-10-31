@@ -37,10 +37,10 @@ namespace ProjectManagement.Services
             return true;
         }
 
-        public bool Delete(Guid ProjectId)
+        public bool Delete(Guid projectId)
         {
 
-            var company = this._context.Companies.Where(x => x.Id == id).FirstOrDefault();
+            var company = this._context.Companies.Where(x => x.Id == projectId).FirstOrDefault();
 
             if (company is null)
                 throw new Exception("Company Not found");

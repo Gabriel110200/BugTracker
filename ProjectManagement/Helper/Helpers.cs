@@ -1,9 +1,14 @@
-﻿namespace ProjectManagement.Helper
+﻿using ProjectManagement.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace ProjectManagement.Helper
 {
-    public class Utils
+    public class Helpers
     {
 
-        public bool ValidateCnpj(string cnpj)
+        public static bool ValidateCnpj(string cnpj)
         {
 
             int[] multiplicator1 = new int[12] { 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2 };
@@ -51,7 +56,7 @@
         }
 
 
-        public bool ValidateCPF(string cpf)
+        public static bool ValidateCPF(string cpf)
         {
 
             int[] multiplicator1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };

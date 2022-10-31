@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data;
+using ProjectManagement.Helper;
 using ProjectManagement.IServices;
 using ProjectManagement.Models;
 using System;
@@ -26,6 +27,8 @@ namespace ProjectManagement.Services
             if (this._context.Companies.Any(x => x.CNPJ == company.CNPJ || x.CorporateName == company.CorporateName))
                 throw new Exception("Current Company was already registered");
 
+            if (!Helpers.ValidateCnpj(company.CNPJ))
+                throw new Exception("CNPJ Inválido!"); 
 
             company.Admins.Add(User);
 
