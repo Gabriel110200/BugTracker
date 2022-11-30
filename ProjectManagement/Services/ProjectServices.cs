@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data;
 using ProjectManagement.Data.Migrations;
 using ProjectManagement.IServices;
@@ -8,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace ProjectManagement.Services
 {
@@ -15,6 +18,8 @@ namespace ProjectManagement.Services
     {
 
         private readonly ApplicationDbContext _context;
+        
+
 
 
         public ProjectServices(ApplicationDbContext context)
@@ -121,12 +126,17 @@ namespace ProjectManagement.Services
 
         public Task<List<Project>> ListAllProjects(Guid CompanyId)
         {
-            throw new NotImplementedException();
+            return this._context.Projects.Where(x => x.CompanyId_FK == CompanyId).ToListAsync();
         }
 
-        public Task<bool> Update(Project Project)
+        public async Task<bool> Update(Project project)
         {
-            throw new NotImplementedException();
+
+            this._context.Update(project);
+            await this._context.SaveChangesAsync();
+
+            return true;
+
         }
     }
 }

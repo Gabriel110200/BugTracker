@@ -1,25 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace ProjectManagement.Models
 {
-    public class ApplicationUser
+    public class ApplicationUser : IdentityUser<Guid>
     {
-        public Guid id { get; set; }
-
-
         [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
+        [MaxLength(50)]
+        public string Name { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        [Compare(nameof(Password), ErrorMessage = "Password and confirmation password did not match")]
-        public string ConfirmPassword { get; set; }
+        public DateTime CreatedDate { get; set; }
 
-        [Required]
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        public DateTime ModifiedDate { get; set; }
+
+        public Guid? CompanyId_FK { get; set; }
+
+        public Company Company { get; set; }
 
 
 

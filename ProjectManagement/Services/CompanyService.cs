@@ -63,7 +63,7 @@ namespace ProjectManagement.Services
         {
             var company = await this._context.Companies.Where(x => x.Id == CompanyId).FirstOrDefaultAsync();
 
-            if (company.Admins.Any(x => x.id == User.id))
+            if (company.Admins.Any(x => x.Id == User.Id))
                 throw new Exception("User already registered as admin");
 
 
@@ -80,31 +80,22 @@ namespace ProjectManagement.Services
 
         }
 
-        public Task<Company> Get(Guid id)
+        public async Task<Company> Get(Guid id)
         {
-            throw new NotImplementedException();
+
+             var company = await this._context.Companies.Where((x) => x.Id == id).FirstOrDefaultAsync();
+             return company;
         }
 
-        public Task<List<ApplicationUser>> ListAdmins()
+    
+
+        public async Task<List<Company>> ListAllCompanies()
         {
-            throw new NotImplementedException();
+
+            return await this._context.Companies.ToListAsync();
+
         }
 
-        public Task<List<Company>> ListAllCompanies()
-        {
-            throw new NotImplementedException();
-        }
 
-
-
-        public Task<bool> Update(Company company)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<bool> ICompanyService.Delete(Guid id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

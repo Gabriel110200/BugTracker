@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.IServices;
+using ProjectManagement.IServices.TicketStrategy;
 using ProjectManagement.Models;
+using ProjectManagement.Services;
 using System;
 using System.Threading.Tasks;
 
@@ -10,7 +12,7 @@ namespace ProjectManagement.Controllers
     {
 
         private ICompanyService _company;
-
+       
         public CompanyController(ICompanyService CompanyService)
         {
             _company = CompanyService;
@@ -21,6 +23,8 @@ namespace ProjectManagement.Controllers
 
         public async Task<IActionResult> CreateCompany(Company company, ApplicationUser User)
         {
+
+
             var isCompanyCreated = await _company.Create(company,User);
 
             return Created(string.Empty,isCompanyCreated);
@@ -37,6 +41,9 @@ namespace ProjectManagement.Controllers
 
             return NoContent();
         }
+
+
+
 
 
     }
