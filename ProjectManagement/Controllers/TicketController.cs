@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Linq;
 using System;
 using ProjectManagement.Models;
+using System.Net.Sockets;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ProjectManagement.Controllers
@@ -15,11 +16,12 @@ namespace ProjectManagement.Controllers
     {
 
         private IProjectService _project;
+        private ITicketService _ticket;
         private readonly ApplicationDbContext _context;
 
-        public TicketController(string nome)
+        public TicketController(string nome, ITicketService ticket)
         {
-          
+            _ticket = ticket;
         }
 
         public static object CriaInstancia(string nome)
@@ -38,7 +40,7 @@ namespace ProjectManagement.Controllers
 
         // POST api/<TicketController>
         [HttpPost]
-        public void Post([FromBody] string ticketType, Ticket ticket)
+        public void Create([FromBody] string ticketType, Ticket ticket)
         {
             ITicketService ticketService = (ITicketService)CriaInstancia(ticketType);
 
@@ -46,16 +48,19 @@ namespace ProjectManagement.Controllers
 
         }
 
-        // PUT api/<TicketController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpGet]
+        public double teste(Project project,string ticketType)
         {
+            ITicketService ticketService = (ITicketService)CriaInstancia(ticketType);
+
+            var mean = ticketService.UrgentPriorityArithmeticMean(project);
+
+            return mean;
+
+           
+
         }
 
-        // DELETE api/<TicketController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+
     }
 }

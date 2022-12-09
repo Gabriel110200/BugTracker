@@ -5,6 +5,7 @@ using ProjectManagement.Data.Migrations;
 using ProjectManagement.IServices;
 using ProjectManagement.Models;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -37,24 +38,20 @@ namespace ProjectManagement.Controllers
         }
 
 
+
+
         [HttpGet("/[Controller]/[Action]")]
 
-        public async Task<IActionResult> GetProjectMean(Guid projectId)
+
+        public async Task<List<Project>> Read(Guid CompanyId)
         {
+            var projects = await _project.ListAllProjects(CompanyId);
 
-            var project = await _context.Projects.Where(x => x.Id == projectId).FirstOrDefaultAsync();
-            
-
-            if(project is null)
-            {
-                throw new Exception("Projeto não encontrado encontrado!");
-            }
-
-
-            return Ok(_project.UrgentPriorityArithmeticMean(project));
-
+            return projects;
 
         }
+
+
 
 
         [HttpGet("/[Controller]/Action")]

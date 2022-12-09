@@ -15,7 +15,6 @@ namespace ProjectManagement.IServices
 
         bool Delete(Guid ProjectId);
 
-        Dictionary<string, double> UrgentPriorityArithmeticMean(Project project)
 
 
 

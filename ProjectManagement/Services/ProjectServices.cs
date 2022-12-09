@@ -62,67 +62,6 @@ namespace ProjectManagement.Services
         }
 
 
-       public Dictionary<string,double> UrgentPriorityArithmeticMean(Project project)
-       {
-
-            var tickets = project.Tickets;
-
-            var ActiveTickets = this._context.Tickets.Where(x => x.ProjectId_FK == project.Id && x.Status == Enum.TicketStatusEnum.Ready);
-
-            var urgentPriorityTicketsNumber = 0.0;
-            var highPriorityTicketsNumber = 0.0;
-            var mediumPriorityTicketsNumber = 0.0;
-            var lowPriorityTicketsNumber = 0.0;
-
-            Dictionary<string, double> dict = new Dictionary<string, double>();
-
-
-            for (var i=0;i<tickets.Count;i++)
-            {
-
-                if (tickets[i].Priority == Enum.TicketPriority.Urgent)
-                {
-                    urgentPriorityTicketsNumber++;
-
-                }
-
-                if (tickets[i].Priority == Enum.TicketPriority.High)
-                {
-                    highPriorityTicketsNumber++; 
-
-                }
-
-                if (tickets[i].Priority == Enum.TicketPriority.Medium)
-                {
-                    mediumPriorityTicketsNumber++; 
-                }
-
-
-                if (tickets[i].Priority == Enum.TicketPriority.Low)
-                {
-                    lowPriorityTicketsNumber++; 
-                }
-
-            }
-
-
-            var urgentMean = urgentPriorityTicketsNumber / tickets.Count;
-            var highMean = highPriorityTicketsNumber / tickets.Count;
-            var mediumMean = mediumPriorityTicketsNumber / tickets.Count;
-            var lowMean = lowPriorityTicketsNumber / tickets.Count;
-
-            dict.Add("Urgentes", urgentMean);
-            dict.Add("Alta prioridade", urgentMean);
-            dict.Add("Média prioridade ", urgentMean);
-            dict.Add("Baixa prioridade", urgentMean);
-
-
-            return dict; 
-
-       }
-
-
-
 
         public Task<List<Project>> ListAllProjects(Guid CompanyId)
         {

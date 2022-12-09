@@ -1,29 +1,25 @@
-﻿using ProjectManagement.Data;
-using ProjectManagement.Helper;
+﻿using Microsoft.EntityFrameworkCore;
+using ProjectManagement.Data;
 using ProjectManagement.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System;
-using System.Linq;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using ProjectManagement.IServices;
+using System.Linq;
 
 namespace ProjectManagement.Services
 {
-    public class TicketService : ITicketService
+    public class TicketBugService : ITicketService
     {
         private readonly ApplicationDbContext _context;
 
-        public TicketService(ApplicationDbContext context)
+        public TicketBugService(ApplicationDbContext context)
         {
             _context = context;
 
         }
 
-        public TicketService()
-        {
-
-        }
+    
 
         public async override Task<bool> Create(Ticket ticket)
         {
@@ -51,15 +47,15 @@ namespace ProjectManagement.Services
             var ActiveTickets = this._context.Tickets.Where(x => x.ProjectId_FK == project.Id && x.Status == Enum.TicketStatusEnum.Ready);
 
             var urgentPriorityTicketsNumber = 0.0;
+ 
 
 
-            Dictionary<string, double> dict = new Dictionary<string, double>();
 
 
             for (var i = 0; i < tickets.Count; i++)
             {
 
-                if (tickets[i].Priority == Enum.TicketPriority.Urgent && tickets[i].Type == Enum.TicketTypeEnum.Feature)
+                if (tickets[i].Priority == Enum.TicketPriority.Urgent && tickets[i].Type == Enum.TicketTypeEnum.Bug)
                 {
                     urgentPriorityTicketsNumber++;
 
@@ -76,6 +72,8 @@ namespace ProjectManagement.Services
             return urgentMean;
 
         }
+
+
 
 
     }

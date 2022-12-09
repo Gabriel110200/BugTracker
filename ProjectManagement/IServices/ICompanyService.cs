@@ -11,18 +11,10 @@ namespace ProjectManagement.IServices
 
          Task<bool> Create(Company company,ApplicationUser user);
 
-         Task<bool> Update(Company company);
-
-
          Task<Company> Get(Guid id);
-
-         Task<List<ApplicationUser>> ListAdmins();
 
 
          Task<bool> RegisterAdmins(Guid CompanyId, ApplicationUser User);
-
-
-         Task<bool> Delete(Guid id); 
 
 
 
