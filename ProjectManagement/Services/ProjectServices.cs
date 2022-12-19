@@ -45,16 +45,18 @@ namespace ProjectManagement.Services
             return true;
         }
 
+     
+
         public bool Delete(Guid projectId)
         {
 
-            var company = this._context.Companies.Where(x => x.Id == projectId)
+            var project = this._context.Projects.Where(x => x.Id == projectId)
                                                  .FirstOrDefault();
 
-            if (company is null)
-                throw new Exception("Company Not found");
+            if (project is null)
+                throw new Exception("Project not found");
 
-            this._context.Companies.Remove(company);
+            this._context.Projects.Remove(project);
 
             this._context.SaveChanges();
 

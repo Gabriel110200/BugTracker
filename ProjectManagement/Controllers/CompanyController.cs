@@ -24,7 +24,7 @@ namespace ProjectManagement.Controllers
         {
 
 
-            var isCompanyCreated = await _company.Create(company,User);
+            var isCompanyCreated = await _company.Create(company);
 
             return Created(string.Empty,isCompanyCreated);
 
