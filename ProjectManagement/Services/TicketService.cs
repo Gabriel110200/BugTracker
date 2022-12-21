@@ -77,7 +77,7 @@ namespace ProjectManagement.Services
 
         }
 
-        public object Delete(Guid guid)
+        public bool Delete(Guid guid)
         {
             return true;
         }
