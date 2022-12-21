@@ -79,6 +79,15 @@ namespace ProjectManagement.Services
 
         public bool Delete(Guid guid)
         {
+
+            var ticket = this._context.Tickets.Where(x => x.Id == guid).FirstOrDefault();
+
+            if (ticket == null)
+                return false;
+
+            this._context.Tickets.Remove(ticket);
+            this._context.SaveChangesAsync();
+
             return true;
         }
     }
