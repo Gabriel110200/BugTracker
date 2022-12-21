@@ -77,6 +77,9 @@ namespace ProjectManagement.Services
 
         }
 
-
+        public object Delete(Guid guid)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
