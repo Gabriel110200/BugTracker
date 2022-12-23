@@ -40,7 +40,7 @@ namespace ProjectManagement.Controllers
 
         // POST api/<TicketController>
         [HttpPost]
-        public void Create([FromBody] string ticketType, Ticket ticket)
+        public void Create([FromQuery] string ticketType, Ticket ticket)
         {
             ITicketService ticketService = (ITicketService)CriaInstancia(ticketType);
 

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.Controllers
 {
+
+    [Route("api/[controller]")]
+    [ApiController]
     public class CompanyController : Controller
     {
 
@@ -18,9 +21,13 @@ namespace ProjectManagement.Controllers
 
         }
 
-        [HttpPost("/[Controller]/[Action]")]
 
-        public async Task<IActionResult> CreateCompany(Company company, ApplicationUser User)
+
+
+
+        [HttpPost("/[Action]/{id}")]
+
+        public async Task<IActionResult> CreateCompany(Company company,[FromRoute] Guid UserId)
         {
 
 

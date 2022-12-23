@@ -4,6 +4,7 @@ using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -48,6 +49,39 @@ namespace TestProject1
             {
                 Assert.AreEqual("CNPJ is invalid!", ex.Message);
             }
+
+
+        }
+
+        [TestMethod]
+
+        public async Task ListComapaniesisValid(Guid userId)
+        {
+
+            try
+            {
+
+            
+
+            CompanyService service = new CompanyService(this.context);
+
+            var companies = service.GetUserCompanies(userId);
+
+            if (companies == null)
+                Assert.Fail(); 
+            else
+            {
+                var isUserAdmin = this.context.Companies.Any(x => x.Admins.Any(x => x.Id == userId));
+
+                Assert.IsTrue(isUserAdmin);
+            }
+
+            }
+            catch(Exception e)
+            {
+                Assert.Fail();
+            }
+
 
 
         }
