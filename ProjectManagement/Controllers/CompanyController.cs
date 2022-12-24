@@ -21,8 +21,12 @@ namespace ProjectManagement.Controllers
 
         }
 
+        [HttpGet("[Action]")]
 
-
+        public IActionResult teste()
+        {
+            return Ok("haa");
+        }
 
 
         [HttpPost("/[Action]/{id}")]
@@ -34,6 +38,19 @@ namespace ProjectManagement.Controllers
             var isCompanyCreated = await _company.Create(company);
 
             return Created(string.Empty,isCompanyCreated);
+
+        }
+
+
+        [HttpGet("[Action]/{userId}")]
+
+        public async Task<IActionResult> GetUserCompanies(Guid userId)
+        {
+
+
+            var companies = this._company.GetOwnedUserCompanies(userId);
+
+            return Ok(companies);
 
         }
 

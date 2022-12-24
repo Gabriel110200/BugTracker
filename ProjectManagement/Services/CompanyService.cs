@@ -96,6 +96,20 @@ namespace ProjectManagement.Services
 
         }
 
+        public async Task<List<Company>> GetOwnedUserCompanies(Guid userId)
+        {
 
+            var companies = await this._context.Companies
+                                                .SelectMany(company => company.Admins)
+                                                .Where(user => user.Id == userId)
+                                                .Select(user => user.Company).ToListAsync();
+                                                
+
+
+
+            //            return this._context.Companies.Where(x => x.Admins.Select(x=> x.Id).FirstOrDefault() == userId) ).ToListAsync();
+
+            return companies;
+        }
     }
 }

@@ -26,7 +26,7 @@ namespace TestProject1
 
 
         [TestMethod]
-        public async Task CreateCompanyCNPJIsInvalid()
+        public async Task CreateCompanyCNPJ_IsInvalid()
         {
 
 
@@ -55,7 +55,7 @@ namespace TestProject1
 
         [TestMethod]
 
-        public async Task ListComapaniesisValid(Guid userId)
+        public async Task GetOwnedUserCompanies_IsValid(Guid userId)
         {
 
             try
@@ -65,7 +65,7 @@ namespace TestProject1
 
             CompanyService service = new CompanyService(this.context);
 
-            var companies = service.GetUserCompanies(userId);
+            var companies = service.GetOwnedUserCompanies(userId);
 
             if (companies == null)
                 Assert.Fail(); 
