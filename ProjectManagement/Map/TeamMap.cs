@@ -23,14 +23,14 @@ namespace ProjectManagement.Map
 
 
             builder.Property(x => x.CompletedProjects)
-                   .HasColumnType("int(5)");
+                   .HasColumnType("int");
 
             builder.Property(x => x.UndoneProjects)
-                   .HasColumnType("int(5)");
+                   .HasColumnType("int");
 
 
             builder.Property(x => x.LateProjects)
-                   .HasColumnType("int(5)");
+                   .HasColumnType("int");
 
 
             builder.HasOne(x => x.AssignedProject)
@@ -38,7 +38,7 @@ namespace ProjectManagement.Map
                    .HasForeignKey(x => x.ProjectId_FK);
 
             builder.Property(x => x.LateProjects)
-                    .HasColumnType("int(5)");
+                    .HasColumnType("int");
 
             builder.Property(x => x.Rating)
                    .HasMaxLength(20)

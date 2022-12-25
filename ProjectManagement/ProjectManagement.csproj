@@ -12,6 +12,18 @@
     <Compile Remove="Data\Migrations\20221029001708_project.Designer.cs" />
     <Compile Remove="Data\Migrations\20221029001857_project.cs" />
     <Compile Remove="Data\Migrations\20221029001857_project.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221225013146_usercompanies.cs" />
+    <Compile Remove="Data\Migrations\20221225013146_usercompanies.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221225013455_usercompanies.cs" />
+    <Compile Remove="Data\Migrations\20221225013455_usercompanies.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221225102701_fixmappings.cs" />
+    <Compile Remove="Data\Migrations\20221225102701_fixmappings.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221225103134_fixmappings.cs" />
+    <Compile Remove="Data\Migrations\20221225103134_fixmappings.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221225103238_fixmappings.cs" />
+    <Compile Remove="Data\Migrations\20221225103238_fixmappings.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221225103620_fixmappings.cs" />
+    <Compile Remove="Data\Migrations\20221225103620_fixmappings.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

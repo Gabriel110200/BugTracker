@@ -15,8 +15,7 @@ namespace ProjectManagement.Map
 
 
             builder.Property(x => x.Name)
-                   .HasColumnType("varchar(30)")
-                   .IsRequired();
+                   .HasColumnType("varchar(30)");
 
             builder.Property(x => x.CNPJ)
                    .HasColumnType("varchar(100)")
@@ -32,6 +31,8 @@ namespace ProjectManagement.Map
 
             builder.Property(x => x.Image)
                    .HasColumnType("varchar(80)");
+
+            builder.HasMany(x => x.Admins).WithOne();
 
             builder.HasMany(x => x.Teams)
                     .WithOne()

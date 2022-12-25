@@ -59,26 +59,26 @@ namespace ProjectManagement.Services
         }
 
 
-        public async Task<bool> RegisterAdmins(Guid CompanyId,ApplicationUser User)
-        {
-            var company = await this._context.Companies.Where(x => x.Id == CompanyId).FirstOrDefaultAsync();
+        //public async Task<bool> RegisterAdmins(Guid CompanyId,User User)
+        //{
+        //    var company = await this._context.Companies.Where(x => x.Id == CompanyId).FirstOrDefaultAsync();
 
-            if (company.Admins.Any(x => x.Id == User.Id))
-                throw new Exception("User already registered as admin");
-
-
-            company.Admins.Add(User); 
-
-            this._context.Companies.Update(company);
-            await this._context.SaveChangesAsync();
+        //    if (company.Admins.Any(x => x.UserId == User.Id))
+        //        throw new Exception("User already registered as admin");
 
 
-            return true;
+        //    company.Admins.Add(User); 
+
+        //    this._context.Companies.Update(company);
+        //    await this._context.SaveChangesAsync();
+
+
+        //    return true;
 
 
 
 
-        }
+        //}
 
         public async Task<Company> Get(Guid id)
         {
@@ -96,20 +96,30 @@ namespace ProjectManagement.Services
 
         }
 
-        public async Task<List<Company>> GetOwnedUserCompanies(Guid userId)
+        public Task<List<Company>> GetOwnedUserCompanies(Guid id)
         {
-
-            var companies = await this._context.Companies
-                                                .SelectMany(company => company.Admins)
-                                                .Where(user => user.Id == userId)
-                                                .Select(user => user.Company).ToListAsync();
-                                                
-
-
-
-            //            return this._context.Companies.Where(x => x.Admins.Select(x=> x.Id).FirstOrDefault() == userId) ).ToListAsync();
-
-            return companies;
+            throw new NotImplementedException();
         }
+
+        public Task<bool> RegisterAdmins(Guid CompanyId, User User)
+        {
+            throw new NotImplementedException();
+        }
+
+        //public async List<List<<Company>> GetOwnedUserCompanies(Guid userId)
+        //{
+
+        //    var companies = await this._context.Companies
+        //                                        .SelectMany(company => company.Admins)
+        //                                        .Where(user => user.Id == userId)
+        //                                        .Select(user => user.Company).ToListAsync();
+
+
+
+
+        //    //            return this._context.Companies.Where(x => x.Admins.Select(x=> x.Id).FirstOrDefault() == userId) ).ToListAsync();
+
+        //    return companies;
+        //}
     }
 }

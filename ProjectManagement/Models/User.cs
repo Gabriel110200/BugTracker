@@ -1,22 +1,19 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System;
 using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 
 namespace ProjectManagement.Models
 {
-    public class ApplicationUser : IdentityUser<Guid>
+    public class User : IdentityUser<Guid>
     {
-        [Required]
-        [MaxLength(50)]
-        public string Name { get; set; }
 
+        public Guid Id { get; set; }
         public DateTime CreatedDate { get; set; }
 
         public DateTime ModifiedDate { get; set; }
 
-        public Guid? CompanyId_FK { get; set; }
-
-        public Company Company { get; set; }
+        public List<UserCompany> UserCompany { get; set; }
 
 
 
