@@ -2,46 +2,29 @@
 using ProjectManagement.Models;
 using System.Threading.Tasks;
 using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ProjectManagement.Services
 {
     public class UserService
     {
 
+        private readonly UserManager<User> userManager;
 
-        //    private readonly UserManager<ApplicationUser> userManager;
+        public UserService()
+        {
+                
+        }
 
 
-        //    async Task<Guid> Register(ApplicationUser applicationUser)
-        //    {
-        //        var user = applicationUser;
-        //        var result = await userManager.CreateAsync(user, Guid.NewGuid().ToString());
-        //        var RolesDoUsuario = applicationUser.UserRoles;
-        //        var RolesSelecionadas = applicationUser.SelectedRoles;
+        public async Task  Register(User user)
+        {
+         
+            var result = await userManager.CreateAsync(user, user.Password);
 
-        //        if (result.Succeeded)
-        //        {
-        //            if (applicationUser.Admin) await userManager.AddToRoleAsync(user, "Admin");
+            
+           
 
-        //            if (RolesSelecionadas != null || RolesDoUsuario != null)
-        //            {
-        //                await userManager.RemoveFromRolesAsync(user, RolesDoUsuario);
-
-        //                if (RolesSelecionadas != null)
-        //                {
-        //                    await userManager.AddToRolesAsync(user, RolesSelecionadas);
-        //                }
-
-        //            }
-
-        //            return user.Id;
-        //        }
-        //        else
-        //        {
-        //            throw new Exception("Ocorreu um erro ao criar usuário");
-        //        }
-        //    }
-
-        //}
-    }
+        }
+}
 }
