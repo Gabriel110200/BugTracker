@@ -15,6 +15,8 @@ namespace ProjectManagement.Models
 
         public List<UserCompany> UserCompany { get; set; }
 
+        public string Password { get; set; }
+
 
 
 
