@@ -54,21 +54,24 @@ namespace TestProject1
                 };
 
 
-                UserService service = new UserService(this.context,userManager);
-               
-
-                var wasUserRegistered = service.Register(user);
+                UserService service = new UserService(this.context, userManager);
 
 
-                Assert.IsTrue(wasUserRegistered); 
+                IdentityResult wasUserRegistered = await service.Register(user, "Abc@123456");
 
 
-            }catch(Exception ex)
+                Assert.IsTrue(wasUserRegistered.Succeeded);
+
+
+            }
+            catch(Exception ex)
             {
                 Assert.Fail();
             }
 
         }
+
+
 
 
     }

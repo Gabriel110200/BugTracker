@@ -4,33 +4,40 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Data;
+using ProjectManagement.IServices;
 
 namespace ProjectManagement.Services
 {
-    public class UserService
+    public class UserService : IUserService
     {
 
-        private readonly UserManager<User> userManager;
+        private readonly UserManager<IdentityUser> userManager;
+
         private readonly ApplicationDbContext _context;
 
 
-        public UserService(UserManager<User> userManager)
+        public UserService(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
+            this.userManager = userManager;
+            _context = context;
             this.userManager = userManager;
         }
 
 
-        public async Task  Register()
+
+        public async Task<IdentityResult> Register(IdentityUser user, string password)
         {
+
 
             try
             {
+                var wasUserRegistered = await this.userManager.CreateAsync(user, "temp123465");
 
-              //  var teste = new User() { Id = Guid.Parse("4986ef8d-5110-44b8-9e1c-70e4847b74a9"), UserName = "Teste" }; 
+                return wasUserRegistered;
 
-              //   var r =  await userManager.CreateAsync(teste, "123456");
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }
@@ -38,5 +45,5 @@ namespace ProjectManagement.Services
 
 
         }
-}
+    }
 }
