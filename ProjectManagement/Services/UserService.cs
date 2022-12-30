@@ -21,14 +21,14 @@ namespace ProjectManagement.Services
         }
 
 
-        public bool  Register(IdentityUser user,string password)
+        public async  Task<IdentityResult>  Register(IdentityUser user,string password)
         {
 
             try
             {
-
+                var wasUserRegistered = await this.userManager.CreateAsync(user,password);
            
-                return true;
+                return wasUserRegistered;
 
               
             }catch(Exception ex)

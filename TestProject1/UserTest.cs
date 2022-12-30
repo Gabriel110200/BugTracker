@@ -57,10 +57,10 @@ namespace TestProject1
                 UserService service = new UserService(this.context,userManager);
                
 
-                var wasUserRegistered = service.Register(user,"Abc@123456");
+                IdentityResult wasUserRegistered = await service.Register(user,"Abc@123456");
 
 
-                Assert.IsTrue(wasUserRegistered); 
+                Assert.IsTrue(wasUserRegistered.Succeeded); 
 
 
             }catch(Exception ex)
@@ -69,6 +69,10 @@ namespace TestProject1
             }
 
         }
+
+
+    
+     
 
 
 
