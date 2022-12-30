@@ -15,15 +15,15 @@ namespace ProjectManagement.Map
 
 
             builder.Property(x => x.Name)
-                   .HasColumnType("varchar(30)");
+                   .HasColumnType("varchar(30)")
+                   .IsRequired();
 
             builder.Property(x => x.CNPJ)
                    .HasColumnType("varchar(100)")
                    .IsRequired();
 
             builder.Property(x => x.CorporateName)
-                    .HasColumnType("varchar(50)")
-                    .IsRequired();
+                    .HasColumnType("varchar(50)");
 
             builder.Property(x => x.Description)
                     .HasColumnType("varchar(50)");
@@ -32,7 +32,9 @@ namespace ProjectManagement.Map
             builder.Property(x => x.Image)
                    .HasColumnType("varchar(80)");
 
-            builder.HasMany(x => x.Admins).WithOne();
+            builder.HasOne(x => x.Admin)
+                   .WithMany()
+                   .HasForeignKey(x => x.UserId);
 
             builder.HasMany(x => x.Teams)
                     .WithOne()
