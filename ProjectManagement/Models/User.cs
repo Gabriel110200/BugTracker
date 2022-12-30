@@ -5,17 +5,16 @@ using System.Collections.Generic;
 
 namespace ProjectManagement.Models
 {
-    public class User : IdentityUser<Guid>
+    public class User : IdentityUser
     {
 
-        public Guid Id { get; set; }
+
         public DateTime CreatedDate { get; set; }
 
         public DateTime ModifiedDate { get; set; }
 
         public List<UserCompany> UserCompany { get; set; }
 
-        public string Password { get; set; }
 
 
 

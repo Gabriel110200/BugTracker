@@ -14,15 +14,15 @@ namespace ProjectManagement.Data
 
         public DbSet<Company> Companies { get; set; }
 
-      //  public DbSet<Team> Teams { get; set; }
+        public DbSet<Team> Teams { get; set; }
 
         public DbSet<Project> Projects { get; set; }  
 
         public DbSet<Ticket> Tickets { get; set; }
 
-        public DbSet<User> Users { get; set; }
+       // public DbSet<User> Users { get; set; }
 
-        public DbSet<UserCompany> userCompanies { get; set; }
+      //  public DbSet<UserCompany> userCompanies { get; set; }
 
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)

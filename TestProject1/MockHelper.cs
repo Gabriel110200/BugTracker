@@ -10,36 +10,63 @@ namespace TestProject1
 {
     public class MockHelper
     {
-        public static Mock<UserManager<User>> MockUserManager(ApplicationDbContext context)
+
+
+
+        public static Mock<UserManager<TUser>> MockUserManager<TUser>(List<TUser> ls) where TUser : class
         {
+            var store = new Mock<IUserStore<TUser>>();
+            var mgr = new Mock<UserManager<TUser>>(store.Object, null, null, null, null, null, null, null, null);
+            mgr.Object.UserValidators.Add(new UserValidator<TUser>());
+            mgr.Object.PasswordValidators.Add(new PasswordValidator<TUser>());
 
-            var userStore = new Mock<IUserStore<User>>();
-
-            var userManager = new Mock<UserManager<User>>(userStore.Object, null, null, null, null, null, null, null, null);
-
-
-            userManager.Object.UserValidators.Add(new UserValidator<User>()); 
-            userManager.Object.PasswordValidators.Add(new PasswordValidator<User>());
-
-            userManager.Setup(x => x.DeleteAsync(It.IsAny<User>()))
-                       .ReturnsAsync(IdentityResult.Success);
+            mgr.Setup(x => x.DeleteAsync(It.IsAny<TUser>()))
+                .ReturnsAsync(IdentityResult.Success);
 
 
-            userManager.Setup(x => x.CreateAsync(It.IsAny<User>()))
-                       .ReturnsAsync(IdentityResult.Success)
-                       .Callback<User>(x =>
-                       {
-                           
-                           context.Users.Add(x);
-                           context.SaveChangesAsync().ConfigureAwait(false).GetAwaiter().GetResult();
-
-                       }
-                       );
+            mgr.Setup(x => x.CreateAsync(It.IsAny<TUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success)
+                .Callback<TUser, string>((x, y) => ls.Add(x));
 
 
-            return userManager; 
+            mgr.Setup(x => x.UpdateAsync(It.IsAny<TUser>())).ReturnsAsync(IdentityResult.Success);
 
+            return mgr;
         }
+
+
+        //public static Mock<UserManager<IdentityUser>> MockUserManager(ApplicationDbContext context)
+        //{
+
+        //    var userStore = new Mock<IUserStore<IdentityUser>>();
+
+        //    var userManager = new Mock<UserManager<IdentityUser>>(userStore.Object, null, null, null, null, null, null, null, null);
+
+
+        //    userManager.Object.UserValidators.Add(new UserValidator<IdentityUser>()); 
+        //    userManager.Object.PasswordValidators.Add(new PasswordValidator<IdentityUser>());
+
+        //    userManager.Setup(x => x.DeleteAsync(It.IsAny<IdentityUser>()))
+        //               .ReturnsAsync(IdentityResult.Success);
+
+        //    mgr.Setup(x => x.CreateAsync(It.IsAny<TUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success).Callback<TUser, string>((x, y) => ls.Add(x));
+
+
+        //    userManager.Setup(x => x.CreateAsync(It.IsAny<IdentityUser>()))
+        //               .ReturnsAsync(IdentityResult.Success)
+        //               .Callback<User>(x =>
+        //               {
+
+        //                   context.Users.Add(x);
+        //                   context.SaveChangesAsync().ConfigureAwait(false).GetAwaiter().GetResult();
+
+        //               }
+        //               );
+
+
+        //    return userManager; 
+
+        //}
 
     }
 }

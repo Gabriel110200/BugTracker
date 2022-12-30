@@ -22,34 +22,34 @@ namespace TestProject1
         }
 
 
-        [TestMethod]
-        public  void  testTicketDelete()
-        {
-            PrepareDatabase();
-            TicketService service = new TicketService(this.context);
+        //[TestMethod]
+        //public  void  testTicketDelete()
+        //{
+        //    //PrepareDatabase();
+        //    TicketService service = new TicketService(this.context);
 
-             service.Delete(Guid.Parse("idTest"));
+        //     service.Delete(Guid.Parse("idTest"));
 
-            var wasTicketDeleted = this.context.Tickets.Any(x => x.Id == Guid.Parse("idTest"));
+        //    var wasTicketDeleted = this.context.Tickets.Any(x => x.Id == Guid.Parse("idTest"));
 
-            Assert.IsTrue(wasTicketDeleted);
+        //    Assert.IsTrue(wasTicketDeleted);
 
-        }
+        //}
 
 
-        public void PrepareDatabase()
-        {
-            Ticket ticket =  new Ticket()
-            {
-                Id = Guid.Parse("idTest"),
-                Title = "Ticket Teste",
+        //public void PrepareDatabase()
+        //{
+        //    Ticket ticket =  new Ticket()
+        //    {
+        //        Id = Guid.Parse("idTest"),
+        //        Title = "Ticket Teste",
 
-            };
+        //    };
 
-            this.context.Tickets.Add(ticket);
-            this.context.SaveChangesAsync();
+        //    this.context.Tickets.Add(ticket);
+        //    this.context.SaveChangesAsync();
 
-        }
+        //}
 
 
 

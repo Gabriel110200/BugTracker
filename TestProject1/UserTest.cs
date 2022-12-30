@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjectManagement.Data;
 using ProjectManagement.Models;
@@ -10,6 +11,8 @@ using System.Threading.Tasks;
 
 namespace TestProject1
 {
+    [TestClass]
+
     public class UserTest
     {
 
@@ -18,17 +21,17 @@ namespace TestProject1
         public ApplicationDbContext context;
 
 
-        public UserTest(UserManager<User> userManager)
+        public UserTest()
         {
-            _userManager = userManager;
 
             Connect connect = new Connect();
 
             this.context = connect.CriarContextInMemory();
-            
+     
+
         }
 
-
+        [TestMethod]
         public async Task RegisterUserIsValid()
         {
 
@@ -36,37 +39,37 @@ namespace TestProject1
             try
             {
 
-           
-                UserService service = new UserService();
-
-                User user = new User()
+                var users = new List<IdentityUser>
                 {
-                    UserName = "UserTest",
-                    Email = "teste@hotmail.com",
-                    Password = "123456"
+                    new IdentityUser() { UserName = "teste", Email = "teste@hotmail.com" },
+                    new IdentityUser() { UserName = "teste3", Email = "teste@gmail.com" }
                 };
 
-              service.Register(user);
+                var userManager = MockHelper.MockUserManager<IdentityUser>(users).Object;
 
-              var registeredUser = _userManager.FindByEmailAsync(user.Email);
+                var user = new IdentityUser()
+                {
+                    UserName = "GabrielTeste",
+                    Email = "tt@gmail.com"
+                };
 
-              Assert.IsNotNull(registeredUser);
+
+                UserService service = new UserService(this.context,userManager);
+               
+
+                var wasUserRegistered = service.Register(user);
+
+
+                Assert.IsTrue(wasUserRegistered); 
 
 
             }catch(Exception ex)
             {
-                throw ex;
+                Assert.Fail();
             }
 
         }
 
-        public void PrepareDatabase()
-        {
-           
-
-
-
-        }
 
     }
 }

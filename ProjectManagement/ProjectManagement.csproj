@@ -24,6 +24,18 @@
     <Compile Remove="Data\Migrations\20221225103238_fixmappings.Designer.cs" />
     <Compile Remove="Data\Migrations\20221225103620_fixmappings.cs" />
     <Compile Remove="Data\Migrations\20221225103620_fixmappings.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221225234620_remove-tables.cs" />
+    <Compile Remove="Data\Migrations\20221225234620_remove-tables.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221225234823_changeUser.cs" />
+    <Compile Remove="Data\Migrations\20221225234823_changeUser.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221225234926_changeUser.cs" />
+    <Compile Remove="Data\Migrations\20221225234926_changeUser.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221225234953_changeUser.cs" />
+    <Compile Remove="Data\Migrations\20221225234953_changeUser.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221227211759_user.cs" />
+    <Compile Remove="Data\Migrations\20221227211759_user.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221227214045_removeUser.cs" />
+    <Compile Remove="Data\Migrations\20221227214045_removeUser.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

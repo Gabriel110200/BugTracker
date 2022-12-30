@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ProjectManagement.Data;
 using ProjectManagement.IServices;
+using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,7 @@ namespace ProjectManagement
 
 
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddControllersWithViews();
             services.AddRazorPages();

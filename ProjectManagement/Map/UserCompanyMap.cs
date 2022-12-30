@@ -10,9 +10,6 @@ namespace ProjectManagement.Map
         {
             builder.HasKey(x =>  x.DDD );
 
-            builder.HasOne(x => x.User)
-                    .WithMany(x => x.UserCompany)
-                    .HasForeignKey(x => x.UserId);
 
             builder.HasOne(x => x.Company)
                     .WithMany(X => X.Admins)
