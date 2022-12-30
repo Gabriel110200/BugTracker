@@ -14,14 +14,16 @@ namespace ProjectManagement.Controllers
     [ApiController]
     public class CompanyController : Controller
     {
-        private readonly UserManager<User> userManager;
+        private readonly UserManager<IdentityUser> userManager;
 
         private ICompanyService _company;
+        private IUserService _userService;
 
-        public CompanyController(ICompanyService CompanyService, UserManager<User> userManager)
+        public CompanyController(ICompanyService CompanyService, UserManager<IdentityUser> userManager, IUserService userService)
         {
             _company = CompanyService;
             this.userManager = userManager;
+            _userService = userService;
         }
 
         [HttpGet("[Action]")]
@@ -31,19 +33,7 @@ namespace ProjectManagement.Controllers
 
         
 
-                try
-                {
-
-                   var teste = new User() {  UserName = "Teste" };
-
-                    var r = await userManager.CreateAsync(teste, "Abcd@123456");
-
-                }
-                catch (Exception ex)
-                {
-                    throw ex;
-                }
-
+              
 
 
 
