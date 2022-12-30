@@ -10,26 +10,27 @@ namespace ProjectManagement.Services
     public class UserService
     {
 
-        private readonly UserManager<User> userManager;
+        private readonly UserManager<IdentityUser> userManager;
         private readonly ApplicationDbContext _context;
 
 
-        public UserService(UserManager<User> userManager)
+        public UserService( ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             this.userManager = userManager;
+            _context = context;
         }
 
 
-        public async Task  Register()
+        public bool  Register(IdentityUser user,string password)
         {
 
             try
             {
 
-              //  var teste = new User() { Id = Guid.Parse("4986ef8d-5110-44b8-9e1c-70e4847b74a9"), UserName = "Teste" }; 
+           
+                return true;
 
-              //   var r =  await userManager.CreateAsync(teste, "123456");
-
+              
             }catch(Exception ex)
             {
                 throw ex;

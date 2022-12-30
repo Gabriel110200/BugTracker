@@ -57,7 +57,7 @@ namespace TestProject1
                 UserService service = new UserService(this.context,userManager);
                
 
-                var wasUserRegistered = service.Register(user);
+                var wasUserRegistered = service.Register(user,"Abc@123456");
 
 
                 Assert.IsTrue(wasUserRegistered); 
@@ -69,6 +69,17 @@ namespace TestProject1
             }
 
         }
+
+
+
+
+
+
+
+
+
+       
+
 
 
     }
