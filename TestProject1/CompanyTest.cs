@@ -53,49 +53,6 @@ namespace TestProject1
 
         }
 
-        //[TestMethod]
-
-        //public async Task GetOwnedUserCompanies_IsValid(Guid userId)
-        //{
-
-        //    try
-        //    {
-
-            
-
-        //    CompanyService service = new CompanyService(this.context);
-
-        //    var companies = service.GetOwnedUserCompanies(userId);
-
-        //    if (companies == null)
-        //        Assert.Fail(); 
-        //    else
-        //    {
-        //        var isUserAdmin = this.context.Companies.Any(x => x.Admins.Any(x => x.Id == userId));
-
-        //        Assert.IsTrue(isUserAdmin);
-        //    }
-
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        Assert.Fail();
-        //    }
-
-
-
-        //}
-
-
-        [TestMethod]
-        public async Task CompanyAlreadyRegistered()
-        {
-            CompanyService service = new CompanyService(this.context);
-
-           
-
-
-        }
 
 
     }

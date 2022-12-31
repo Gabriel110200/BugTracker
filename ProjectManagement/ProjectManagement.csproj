@@ -36,6 +36,10 @@
     <Compile Remove="Data\Migrations\20221227211759_user.Designer.cs" />
     <Compile Remove="Data\Migrations\20221227214045_removeUser.cs" />
     <Compile Remove="Data\Migrations\20221227214045_removeUser.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221230232603_fixcompanyMap.cs" />
+    <Compile Remove="Data\Migrations\20221230232603_fixcompanyMap.Designer.cs" />
+    <Compile Remove="Data\Migrations\20221230233454_fixCompanyUserMap.cs" />
+    <Compile Remove="Data\Migrations\20221230233454_fixCompanyUserMap.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

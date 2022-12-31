@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 
 namespace ProjectManagement.Models
@@ -17,7 +18,8 @@ namespace ProjectManagement.Models
 
         public string? Description { get; set; }
 
-        public List<UserCompany> Admins { get; set; }
+        public string UserId { get; set; }
+        public IdentityUser Admin { get; set; }
 
         public List<Team>? Teams { get; set; }
 
