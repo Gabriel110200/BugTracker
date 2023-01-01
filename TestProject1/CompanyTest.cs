@@ -162,11 +162,11 @@ namespace TestProject1
             {
                 await PrepareDatabase();
 
-                var companyId = this.context.Companies.First(x => x.Id == Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe")); 
+
 
                 var service= new CompanyService(this.context);
 
-                await service.Delete(companyId);
+                await service.Delete(Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"));
 
                 Assert.IsFalse(this.context.Companies.Any(x => x.Id == Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"))); 
                 
