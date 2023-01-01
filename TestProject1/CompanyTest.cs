@@ -21,10 +21,9 @@ namespace TestProject1
             Connect connect = new Connect();
             this.context = connect.CriarContextInMemory();
             this.context.Database.EnsureDeleted();
-            PrepareDatabase();
         }
 
-     
+
 
         [TestMethod]
         public async Task CreateCompanyIsValid()
@@ -43,19 +42,19 @@ namespace TestProject1
             try
             {
 
-            
-            CompanyService service = new CompanyService(this.context);
 
-            Company company = new Company()
-            { 
-                Name = "Empresa Teste", 
-                CNPJ = "111111111"
-            };
+                CompanyService service = new CompanyService(this.context);
 
-            await service.Create(company);
+                Company company = new Company()
+                {
+                    Name = "Empresa Teste",
+                    CNPJ = "111111111"
+                };
 
-            } 
-            catch(Exception ex)
+                await service.Create(company);
+
+            }
+            catch (Exception ex)
             {
                 Assert.AreEqual("CNPJ is invalid!", ex.Message);
             }
@@ -69,11 +68,15 @@ namespace TestProject1
 
         public async Task CreateCompanyAlreadyExists()
         {
-            PrepareDatabase();
+
 
             try
             {
-                var service =new CompanyService(this.context);
+
+                await PrepareDatabase();
+
+
+                var service = new CompanyService(this.context);
 
                 var company = new Company()
                 {
@@ -87,17 +90,18 @@ namespace TestProject1
 
                 Assert.Fail();
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
 
-                Assert.AreEqual("Company already Registered", ex.Message);
+                Assert.AreEqual("Company was already registered!", ex.Message);
 
             }
 
 
         }
 
-        private  void PrepareDatabase()
+        private async Task PrepareDatabase()
         {
 
             var company = new Company()
@@ -109,8 +113,10 @@ namespace TestProject1
             };
 
 
-             this.context.Companies.Add(company);
+            this.context.Companies.Add(company);
+            await this.context.SaveChangesAsync();
         }
 
     }
 }
+

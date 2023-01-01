@@ -24,8 +24,8 @@ namespace ProjectManagement.Services
         public async Task<bool> Create(Company company)
         {
 
-            if (this._context.Companies.Any(x => x.CNPJ == company.CNPJ || x.CorporateName == company.CorporateName))
-                throw new Exception("Current Company was already registered");
+            if (this._context.Companies.Any(x => x.CNPJ == company.CNPJ))
+                throw new Exception("Company was already registered!");
 
             if (!Helpers.ValidateCnpj(company.CNPJ))
                 throw new Exception("CNPJ is invalid!"); 
