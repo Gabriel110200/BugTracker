@@ -27,6 +27,9 @@ namespace ProjectManagement.Services
             if (this._context.Companies.Any(x => x.CNPJ == company.CNPJ))
                 throw new Exception("Company was already registered!");
 
+            if (this._context.Companies.Any(x => x.UserId == company.UserId && x.Name == company.Name))
+                throw new Exception("There is a company regitered with that name!");
+
             if (!Helpers.ValidateCnpj(company.CNPJ))
                 throw new Exception("CNPJ is invalid!"); 
 

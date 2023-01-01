@@ -116,6 +116,43 @@ namespace TestProject1
 
         }
 
+        [TestMethod]
+
+        public async Task SameNameCompany()
+        {
+
+
+            try
+            {
+
+                await PrepareDatabase();
+
+
+                var service = new CompanyService(this.context);
+
+                var company = new Company()
+                {
+                    UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
+                    Name = "Empresa Test",
+                    CNPJ = "53.384.888/0001-70",
+
+                };
+
+                await service.Create(company);
+
+                Assert.Fail();
+
+            }
+            catch (Exception ex)
+            {
+
+                Assert.AreEqual("There is a company regitered with that name!", ex.Message);
+
+            }
+
+
+        }
+
         private async Task PrepareDatabase()
         {
 
