@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TestProject1
 {
@@ -29,6 +30,20 @@ namespace TestProject1
         public async Task CreateCompanyIsValid()
         {
 
+            var service = new CompanyService(this.context);
+
+            Company company = new Company()
+            {
+                UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
+                Name = "Empresa Teste",
+                CNPJ = "53.384.888/0001-70"
+
+            };
+            await  service.Create(company);
+
+            var wasCompanyRegistered = this.context.Companies.Any(x => x.CNPJ == "53.384.888/0001-70");
+
+            Assert.IsTrue(wasCompanyRegistered);
 
 
         }
