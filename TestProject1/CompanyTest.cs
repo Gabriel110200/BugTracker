@@ -160,9 +160,9 @@ namespace TestProject1
 
             try
             {
+
+
                 await PrepareDatabase();
-
-
 
                 var service= new CompanyService(this.context);
 
@@ -178,6 +178,29 @@ namespace TestProject1
             catch(Exception ex)
             {
                 Assert.Fail(ex.Message);
+            }
+        }
+
+
+        [TestMethod]
+
+        public async Task DeleteCompanyDoesntExist()
+        {
+
+            try
+            {
+
+                var service = new CompanyService(this.context);
+
+                await service.Delete(Guid.Parse("a6e6315b-addd-4997-bbef-0bb7ce8827c3"));
+
+                Assert.Fail();
+
+                
+
+            }catch(Exception ex)
+            {
+                Assert.AreEqual(ex.Message, "Company not found!");
             }
         }
 

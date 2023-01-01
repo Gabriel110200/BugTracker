@@ -51,7 +51,7 @@ namespace ProjectManagement.Services
             var company =  this._context.Companies.Where(x => x.Id == id).FirstOrDefault();
 
             if (company is null)
-                throw new Exception("Company Not found");
+                throw new Exception("Company not found!");
 
            this._context.Companies.Remove(company);
            this._context.SaveChanges();
