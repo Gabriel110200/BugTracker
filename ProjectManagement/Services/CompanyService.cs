@@ -25,12 +25,8 @@ namespace ProjectManagement.Services
         {
 
             validateCompany(company);
-
-
             this._context.Companies.Add(company); 
-
             await this._context.SaveChangesAsync();
-
             return true;
 
 
@@ -49,19 +45,18 @@ namespace ProjectManagement.Services
                 throw new Exception("CNPJ is invalid!");
         }
 
-        public bool Delete(Guid id)
+        public async Task Delete(Guid id)
         {
 
-           var company =  this._context.Companies.Where(x => x.Id == id).FirstOrDefault();
+            var company =  this._context.Companies.Where(x => x.Id == id).FirstOrDefault();
 
             if (company is null)
                 throw new Exception("Company Not found");
 
-             this._context.Companies.Remove(company);
+           this._context.Companies.Remove(company);
+           this._context.SaveChanges();
 
-             this._context.SaveChanges();
 
-            return true;
 
         }
 

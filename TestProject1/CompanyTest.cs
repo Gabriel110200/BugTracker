@@ -153,11 +153,40 @@ namespace TestProject1
 
         }
 
+
+        [TestMethod]
+        public async Task DeleteCompanyIsValid()
+        {
+
+            try
+            {
+                await PrepareDatabase();
+
+                var companyId = this.context.Companies.First(x => x.Id == Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe")); 
+
+                var service= new CompanyService(this.context);
+
+                await service.Delete(companyId);
+
+                Assert.IsFalse(this.context.Companies.Any(x => x.Id == Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"))); 
+                
+
+
+
+
+            }
+            catch(Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+        }
+
         private async Task PrepareDatabase()
         {
 
             var company = new Company()
             {
+                Id = Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"),
                 UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
                 Name = "Empresa Test",
                 CNPJ = "111111111",
