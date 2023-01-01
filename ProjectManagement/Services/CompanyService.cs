@@ -24,16 +24,8 @@ namespace ProjectManagement.Services
         public async Task<bool> Create(Company company)
         {
 
-            if (this._context.Companies.Any(x => x.CNPJ == company.CNPJ))
-                throw new Exception("Company was already registered!");
+            validateCompany(company);
 
-            if (this._context.Companies.Any(x => x.UserId == company.UserId && x.Name == company.Name))
-                throw new Exception("There is a company regitered with that name!");
-
-            if (!Helpers.ValidateCnpj(company.CNPJ))
-                throw new Exception("CNPJ is invalid!"); 
-
-            //company.Admins.Add(User);
 
             this._context.Companies.Add(company); 
 
@@ -43,6 +35,18 @@ namespace ProjectManagement.Services
 
 
 
+        }
+
+        private void validateCompany(Company company)
+        {
+            if (this._context.Companies.Any(x => x.CNPJ == company.CNPJ))
+                throw new Exception("Company was already registered!");
+
+            if (this._context.Companies.Any(x => x.UserId == company.UserId && x.Name == company.Name))
+                throw new Exception("There is a company regitered with that name!");
+
+            if (!Helpers.ValidateCnpj(company.CNPJ))
+                throw new Exception("CNPJ is invalid!");
         }
 
         public bool Delete(Guid id)
