@@ -98,9 +98,19 @@ namespace ProjectManagement.Services
 
         }
 
-        public Task<List<Company>> GetOwnedUserCompanies(Guid id)
+        public async Task<List<Company>> GetOwnedUserCompanies(string id)
         {
-            throw new NotImplementedException();
+
+            var doesUserExist = this._context.Users.Any(x=> x.Id == id);
+            if (!doesUserExist)
+                throw new Exception("User not found!");
+
+            var companies = await this._context.Companies.Where(x => x.UserId == id).ToListAsync();
+
+
+
+            return companies;
+            
         }
 
         public Task<bool> RegisterAdmins(Guid CompanyId, User User)

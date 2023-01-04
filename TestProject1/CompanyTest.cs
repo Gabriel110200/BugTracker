@@ -5,6 +5,7 @@ using ProjectManagement.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
@@ -204,6 +205,53 @@ namespace TestProject1
             }
         }
 
+
+        [TestMethod]
+
+        public async Task GetUserCompaniesIsValid()
+        {
+
+            try
+            {
+                await PrepareDatabase();
+
+
+                var service = new CompanyService(this.context);
+
+                var companies = await service.GetOwnedUserCompanies("59cc8c06-319a-424f-843d-aa66deed3c00");
+
+                Assert.IsTrue(companies.Any(x => x.CNPJ == "36.160.011/0001-86"));
+
+
+            }catch(Exception ex)
+            {
+                Assert.Fail(ex.Message);
+            }
+
+        }
+
+        [TestMethod]
+
+        public async Task GetUserCompanies_UserDontExist()
+        {
+            try
+            {
+                var service = new CompanyService(this.context);
+
+                var companies = await service.GetOwnedUserCompanies("59cc8c06-319a-424f-843d-aa66deed3c00");
+
+                Assert.Fail();
+
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("User not found!", ex.Message);
+            }
+
+
+        }
+
+
         private async Task PrepareDatabase()
         {
 
@@ -212,7 +260,7 @@ namespace TestProject1
                 Id = Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"),
                 UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
                 Name = "Empresa Test",
-                CNPJ = "111111111",
+                CNPJ = "36.160.011/0001-86",
 
             };
 

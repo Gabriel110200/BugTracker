@@ -16,7 +16,7 @@ namespace ProjectManagement.IServices
         Task<Company> Get(Guid id);
          
 
-         Task<List<Company>> GetOwnedUserCompanies(Guid id);
+         Task<List<Company>> GetOwnedUserCompanies(string id);
 
 
          Task<bool> RegisterAdmins(Guid CompanyId, User User);
