@@ -230,6 +230,27 @@ namespace TestProject1
 
         }
 
+        [TestMethod]
+
+        public async Task GetUserCompanies_UserDontExist()
+        {
+            try
+            {
+                var service = new CompanyService(this.context);
+
+                var companies = await service.GetOwnedUserCompanies("59cc8c06-319a-424f-843d-aa66deed3c00");
+
+                Assert.Fail();
+
+            }
+            catch (Exception ex)
+            {
+                Assert.AreEqual("User not found!", ex.Message);
+            }
+
+
+        }
+
 
         private async Task PrepareDatabase()
         {
