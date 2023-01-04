@@ -98,7 +98,7 @@ namespace ProjectManagement.Services
 
         }
 
-        public Task<List<Company>> GetOwnedUserCompanies(Guid id)
+        public Task<List<Company>> GetOwnedUserCompanies(string id)
         {
             throw new NotImplementedException();
         }
