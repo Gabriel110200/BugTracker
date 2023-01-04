@@ -56,7 +56,7 @@ namespace ProjectManagement.Controllers
 
         [HttpGet("[Action]/{userId}")]
 
-        public async Task<IActionResult> GetUserCompanies(Guid userId)
+        public async Task<IActionResult> GetUserCompanies(string userId)
         {
 
 

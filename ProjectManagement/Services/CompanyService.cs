@@ -98,9 +98,14 @@ namespace ProjectManagement.Services
 
         }
 
-        public Task<List<Company>> GetOwnedUserCompanies(string id)
+        public async Task<List<Company>> GetOwnedUserCompanies(string id)
         {
-            throw new NotImplementedException();
+
+
+            var companies = await this._context.Companies.Where(x => x.UserId == id).ToListAsync();
+
+            return companies;
+            
         }
 
         public Task<bool> RegisterAdmins(Guid CompanyId, User User)
