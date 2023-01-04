@@ -101,8 +101,13 @@ namespace ProjectManagement.Services
         public async Task<List<Company>> GetOwnedUserCompanies(string id)
         {
 
+            var doesUserExist = this._context.Users.Any(x=> x.Id == id);
+            if (!doesUserExist)
+                throw new Exception("User not found!");
 
             var companies = await this._context.Companies.Where(x => x.UserId == id).ToListAsync();
+
+
 
             return companies;
             
