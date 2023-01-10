@@ -8,6 +8,7 @@ using ProjectManagement.IServices;
 using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -49,22 +50,19 @@ namespace TestProject1
             {
 
 
-            var projectController = new ProjectController(proj.Object,this.context);
+            var service = new ProjectServices(this.context);
 
             Project project = new Project()
             {
-                Name = "Projeto teste"
+                    Name = "Projeto teste",
             };
 
+            Project projectCreated = service.Create(project, Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
 
-            this.proj.Setup(x => x.Create(project, Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"))).ReturnsAsync(()=> true);
 
-            var task = await  projectController.CreateProject(project, Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
 
- 
 
-       
-             Assert.IsTrue(true);
+            Assert.AreEqual(project.Name, projectCreated.Name);
 
             }
             catch(Exception ex)
