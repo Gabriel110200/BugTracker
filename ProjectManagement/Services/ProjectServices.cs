@@ -30,16 +30,14 @@ namespace ProjectManagement.Services
 
         }
 
-        public async Task<bool> Create(Project project, Guid CompanyId)
+        public async Task Create(Project project, Guid CompanyId)
         {
             if (this._context.Projects.Any(x => x.Name == x.Name))
                 throw new Exception("Current Project was already registered");
 
             this._context.Projects.Add(project);
-
             await this._context.SaveChangesAsync();
 
-            return true;
         }
 
      

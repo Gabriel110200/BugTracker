@@ -37,7 +37,7 @@ namespace TestProject1
                                         Priority = ProjectManagement.Enum.TicketPriority.Low 
                                         };
 
-                var service = new TicketService();
+                var service = new TicketService(this.context);
 
                 await service.Create(ticket);
 

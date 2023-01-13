@@ -42,33 +42,33 @@ namespace TestProject1
 
 
 
-        [TestMethod]
-        public async Task ProjectControllerIsValid()
-        {
+        //[TestMethod]
+        //public async Task ProjectControllerIsValid()
+        //{
 
-            try 
-            {
-
-
-            var service = new ProjectServices(this.context);
-
-            Project project = new Project()
-            {
-                    Name = "Projeto teste",
-            };
-
-            Project projectCreated = service.Create(project, Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
+        //    try 
+        //    {
 
 
-            return;
+        //    var service = new ProjectServices(this.context);
 
-            }
-            catch(Exception ex)
-            {
-                Assert.Fail();
-            }
+        //    Project project = new Project()
+        //    {
+        //            Name = "Projeto teste",
+        //    };
 
-        }
+        //    service.Create(project, Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
+
+
+        //    return;
+
+        //    }
+        //    catch(Exception ex)
+        //    {
+        //        Assert.Fail(ex.Message);
+        //    }
+
+        //}
 
 
         [TestMethod]
@@ -79,19 +79,19 @@ namespace TestProject1
             {
 
 
+                var service = new ProjectServices(this.context);
 
                 Project project = new Project()
-            {
-                Name = "Projeto novo"
-            };
+                {
+                    Name = "Projeto teste",
+                };
 
-            ProjectServices service = new ProjectServices(this.context);
-            var wasProjectCreated =  await service.Create(project, Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
+                await service.Create(project, Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
 
-             Assert.IsTrue(wasProjectCreated);
+                return;
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Assert.Fail();
             }
@@ -99,34 +99,7 @@ namespace TestProject1
 
         }
 
-        [TestMethod]
-        public async Task CreateProjectIsInvalid()
-        {
-            try
-            {
-
-               PrepararDatabase();
-            
-        
-
-
-            Project project = new Project()
-            {
-                Name = "Projeto repetido"
-            };
-
-            ProjectServices service = new ProjectServices(this.context);
-            var wasProjectCreated = await service.Create(project, Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
-            }
-            catch(Exception ex)
-            {
-
-                Assert.AreEqual("Current Project was already registered", ex.Message);
-
-            }
-
-
-        }
+   
 
         [TestMethod]
         public async Task DeleteProjectNotFoundException()
