@@ -98,7 +98,7 @@ namespace TestProject1
                 {
                     UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
                     Name = "Empresa Tester",
-                    CNPJ = "111111111",
+                    CNPJ = "36.160.011/0001-86",
 
                 };
 
@@ -263,6 +263,8 @@ namespace TestProject1
                 CNPJ = "36.160.011/0001-86",
 
             };
+
+      
 
 
             this.context.Companies.Add(company);

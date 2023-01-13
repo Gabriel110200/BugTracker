@@ -29,20 +29,17 @@ namespace ProjectManagement.Controllers
         [HttpPost("/[Controller]/[Action]")]
 
 
-        public async Task<IActionResult> CreateProject(Project project,Guid CompanyId)
-        {
-            var isCompanyCreated = await _project.Create(project, CompanyId);
+        //public async Task<IActionResult> CreateProject(Project project,Guid CompanyId)
+        //{
+        //    var isCompanyCreated = await _project.Create(project, CompanyId);
 
-            return Created(string.Empty, isCompanyCreated);
+        //    return Created(string.Empty, isCompanyCreated);
 
-        }
-
+        //}
 
 
 
         [HttpGet("/[Controller]/[Action]")]
-
-
         public async Task<List<Project>> Read(Guid CompanyId)
         {
             var projects = await _project.ListAllProjects(CompanyId);
