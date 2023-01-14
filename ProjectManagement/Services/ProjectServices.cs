@@ -20,17 +20,13 @@ namespace ProjectManagement.Services
         private readonly ApplicationDbContext _context;
         
 
-
-
         public ProjectServices(ApplicationDbContext context)
         {
-
             _context = context;
-
 
         }
 
-        public async Task Create(Project project, Guid CompanyId)
+        public async Task Create(Project project)
         {
             if (this._context.Projects.Any(x => x.Name == x.Name))
                 throw new Exception("Current Project was already registered");

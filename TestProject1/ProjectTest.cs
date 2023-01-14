@@ -8,6 +8,7 @@ using ProjectManagement.IServices;
 using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System;
+using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace TestProject1
         private readonly Mock<IProjectService> proj;
         private ApplicationDbContext context;
 
-
+        
         public ProjectTest()
         {
 
@@ -86,7 +87,7 @@ namespace TestProject1
                     Name = "Projeto teste",
                 };
 
-                await service.Create(project, Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
+                await service.Create(project);
 
                 return;
 
@@ -99,7 +100,33 @@ namespace TestProject1
 
         }
 
-   
+
+        [TestMethod]
+        public async Task ListAllProjects()
+        {
+
+            try
+            {
+
+
+                PrepararDatabase();
+
+                var service = new ProjectServices(this.context);
+                var projects = await service.ListAllProjects(Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
+                Assert.IsInstanceOfType(projects, typeof(List<Project>));
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail();
+            }
+
+
+
+        }
+
 
         [TestMethod]
         public async Task DeleteProjectNotFoundException()
@@ -118,6 +145,9 @@ namespace TestProject1
             }
 
         }
+
+
+        
 
 
         [TestMethod]
@@ -148,6 +178,7 @@ namespace TestProject1
             {
                 Id = Guid.Parse("0b93cf51-4927-4097-bf76-9e1fc165ea24"),
                 Name = "Projeto repetido",
+                CompanyId_FK = Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c")
 
             };
 

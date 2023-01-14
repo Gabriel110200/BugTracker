@@ -9,7 +9,7 @@ namespace ProjectManagement.IServices
     {
         Task<List<Project>> ListAllProjects(Guid CompanyId);
 
-        Task Create(Project Project,Guid CompanyId);
+        Task Create(Project Project);
 
         Task<bool> Update(Project Project);
 
