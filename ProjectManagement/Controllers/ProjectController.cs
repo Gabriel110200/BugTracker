@@ -28,14 +28,27 @@ namespace ProjectManagement.Controllers
 
         [HttpPost("/[Controller]/[Action]")]
 
+        public async Task<IActionResult> CreateProject(Project project)
+        {
+             await _project.Create(project);
 
-        //public async Task<IActionResult> CreateProject(Project project,Guid CompanyId)
-        //{
-        //    var isCompanyCreated = await _project.Create(project, CompanyId);
+            return Created(string.Empty,"");
 
-        //    return Created(string.Empty, isCompanyCreated);
+        }
 
-        //}
+
+        [HttpPost("/[Controller]/[Action]")]
+
+        public async Task<IActionResult> UpdateProject(Project project)
+        {
+
+            await _project.Update(project);
+
+
+            return Ok();
+
+
+        }
 
 
 
