@@ -26,24 +26,12 @@ namespace ProjectManagement.Controllers
             _userService = userService;
         }
 
-        [HttpGet("[Action]")]
-
-        public async  Task<IActionResult> teste()
-        {
-
-        
-
-              
+     
 
 
+        [HttpPost("[Action]/{id}")]
 
-            return Ok("haa");
-        }
-
-
-        [HttpPost("/[Action]/{id}")]
-
-        public async Task<IActionResult> CreateCompany(Company company,[FromRoute] Guid UserId)
+        public async Task<IActionResult> CreateCompany(Company company,[FromRoute] Guid Id)
         {
 
 
@@ -59,8 +47,9 @@ namespace ProjectManagement.Controllers
         public async Task<IActionResult> GetUserCompanies(string userId)
         {
 
+            throw new Exception("hahah");
 
-            var companies = this._company.GetOwnedUserCompanies(userId);
+            var companies =  await this._company.GetOwnedUserCompanies(userId);
 
             return Ok(companies);
 

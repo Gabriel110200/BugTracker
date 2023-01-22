@@ -30,8 +30,7 @@ namespace ProjectManagement.Controllers
 
         public async Task<IActionResult> CreateProject(Project project)
         {
-             await _project.Create(project);
-
+            await _project.Create(project);
             return Created(string.Empty,"");
 
         }
@@ -43,8 +42,6 @@ namespace ProjectManagement.Controllers
         {
 
             await _project.Update(project);
-
-
             return Ok();
 
 
@@ -56,7 +53,6 @@ namespace ProjectManagement.Controllers
         public async Task<List<Project>> Read(Guid CompanyId)
         {
             var projects = await _project.ListAllProjects(CompanyId);
-
             return projects;
 
         }
@@ -69,7 +65,6 @@ namespace ProjectManagement.Controllers
         public  IActionResult Delete(Guid projectId)
         {
             var isProjectDeleted =  _project.Delete(projectId);
-
             return NoContent();
 
         }

@@ -7,8 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ProjectManagement.Data;
 using ProjectManagement.IServices;
+using ProjectManagement.Middlewares;
 using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System;
@@ -66,7 +68,7 @@ namespace ProjectManagement
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env ,ILoggerFactory logger)
         {
             if (env.IsDevelopment())
             {
@@ -81,6 +83,8 @@ namespace ProjectManagement
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            app.UseAPiExceptionHandler(logger);
 
             app.UseRouting();
 
