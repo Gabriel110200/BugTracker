@@ -9,7 +9,7 @@ namespace ProjectManagement.IServices
     {
          Task<List<Company>> ListAllCompanies();
 
-         Task<bool> Create(Company company);
+         Task<Company> Create(Company company);
 
 
 
