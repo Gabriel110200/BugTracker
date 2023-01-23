@@ -9,6 +9,9 @@ namespace ProjectManagement.Map
         public void Configure(EntityTypeBuilder<User> builder)
         {
 
+                   
+                
+
             builder.Property(x => x.ModifiedDate)
                    .HasColumnType("date"); 
 

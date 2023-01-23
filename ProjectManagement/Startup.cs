@@ -84,7 +84,9 @@ namespace ProjectManagement
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseAPiExceptionHandler(logger);
+            //   app.UseAPiExceptionHandler(logger);
+
+            app.ConfigureCustomExceptionMiddleware();
 
             app.UseRouting();
 
@@ -99,5 +101,8 @@ namespace ProjectManagement
                 endpoints.MapRazorPages();
             });
         }
+
+       
+
     }
 }

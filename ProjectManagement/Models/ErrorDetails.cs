@@ -5,7 +5,7 @@ namespace ProjectManagement.Models
     public class ErrorDetails
     {
 
-        public int StatusCodeContext { get; internal set; }
+        public int StatusCode { get; internal set; }
 
         public string Message { get; internal set; }
 

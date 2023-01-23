@@ -5,7 +5,9 @@ using ProjectManagement.IServices;
 using ProjectManagement.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.Services
@@ -21,13 +23,15 @@ namespace ProjectManagement.Services
 
         }
 
-        public async Task<bool> Create(Company company)
+        public async Task<Company> Create(Company company)
         {
 
-            validateCompany(company);
+
+
+             validateCompany(company);
             this._context.Companies.Add(company); 
             await this._context.SaveChangesAsync();
-            return true;
+            return await this._context.Companies.LastAsync();
 
 
 
@@ -36,13 +40,13 @@ namespace ProjectManagement.Services
         private void validateCompany(Company company)
         {
             if (this._context.Companies.Any(x => x.CNPJ == company.CNPJ))
-                throw new Exception("Company was already registered!");
+                throw new ValidationException("Company was already registered!");
 
             if (this._context.Companies.Any(x => x.UserId == company.UserId && x.Name == company.Name))
-                throw new Exception("There is a company regitered with that name!");
+                throw new ValidationException("There is a company regitered with that name!");
 
             if (!Helpers.ValidateCnpj(company.CNPJ))
-                throw new Exception("CNPJ is invalid!");
+                throw new ValidationException("CNPJ is invalid!");
         }
 
         public async Task Delete(Guid id)

@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ProjectManagement.Data;
+using ProjectManagement.Helper;
 using ProjectManagement.IServices;
 using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 
@@ -18,27 +22,27 @@ namespace ProjectManagement.Controllers
 
         private ICompanyService _company;
         private IUserService _userService;
+        private readonly ApplicationDbContext _context;
 
-        public CompanyController(ICompanyService CompanyService, UserManager<IdentityUser> userManager, IUserService userService)
+        public CompanyController(ICompanyService CompanyService, UserManager<IdentityUser> userManager, IUserService userService, ApplicationDbContext context)
         {
             _company = CompanyService;
             this.userManager = userManager;
             _userService = userService;
+            _context = context;
         }
 
-     
 
 
-        [HttpPost("[Action]/{id}")]
 
-        public async Task<IActionResult> CreateCompany(Company company,[FromRoute] Guid Id)
+        [HttpPost("[Action]")]
+
+        public async Task<IActionResult> CreateCompany(Company company)
         {
 
+            var CompanyCreated = await _company.Create(company);
 
-            var isCompanyCreated = await _company.Create(company);
-
-            return Created(string.Empty,isCompanyCreated);
-
+            return Created(string.Empty,CompanyCreated);
         }
 
 
@@ -47,7 +51,7 @@ namespace ProjectManagement.Controllers
         public async Task<IActionResult> GetUserCompanies(string userId)
         {
 
-            throw new Exception("hahah");
+            
 
             var companies =  await this._company.GetOwnedUserCompanies(userId);
 

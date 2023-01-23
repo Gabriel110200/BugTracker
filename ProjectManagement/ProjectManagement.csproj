@@ -40,6 +40,8 @@
     <Compile Remove="Data\Migrations\20221230232603_fixcompanyMap.Designer.cs" />
     <Compile Remove="Data\Migrations\20221230233454_fixCompanyUserMap.cs" />
     <Compile Remove="Data\Migrations\20221230233454_fixCompanyUserMap.Designer.cs" />
+    <Compile Remove="Data\Migrations\20230122204914_fix-company.cs" />
+    <Compile Remove="Data\Migrations\20230122204914_fix-company.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
