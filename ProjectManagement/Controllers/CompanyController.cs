@@ -24,11 +24,9 @@ namespace ProjectManagement.Controllers
         private IUserService _userService;
         private readonly ApplicationDbContext _context;
 
-        public CompanyController(ICompanyService CompanyService, UserManager<IdentityUser> userManager, IUserService userService, ApplicationDbContext context)
+        public CompanyController(ICompanyService CompanyService, ApplicationDbContext context)
         {
             _company = CompanyService;
-            this.userManager = userManager;
-            _userService = userService;
             _context = context;
         }
 
