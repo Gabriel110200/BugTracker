@@ -26,16 +26,11 @@ namespace ProjectManagement.Services
         public async Task<Company> Create(Company company)
         {
 
-           
-           
-
              validateCompany(company);
             this._context.Companies.Add(company); 
             await this._context.SaveChangesAsync();
-            return await this._context.Companies.LastAsync();
 
-           
-
+            return await this._context.Companies.FirstOrDefaultAsync(x => x.Id == company.Id);
 
 
         }

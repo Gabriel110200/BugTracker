@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using ProjectManagement.Data;
 using ProjectManagement.IServices;
 using ProjectManagement.Middlewares;
@@ -33,10 +34,10 @@ namespace ProjectManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
+            options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-
+          
 
             services.AddDefaultIdentity<IdentityUser>(
                 options => options.SignIn.RequireConfirmedAccount = true
@@ -50,7 +51,6 @@ namespace ProjectManagement
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
 
-
                 // User settings.
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
@@ -60,7 +60,9 @@ namespace ProjectManagement
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-
+            services.AddControllers().AddJsonOptions(options => {
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+            });
 
             services.AddScoped<ICompanyService, CompanyService>();
             services.AddScoped<IUserService, UserService>();
