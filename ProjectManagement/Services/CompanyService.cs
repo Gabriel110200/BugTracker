@@ -53,7 +53,7 @@ namespace ProjectManagement.Services
             var company =  this._context.Companies.Where(x => x.Id == id).FirstOrDefault();
 
             if (company is null)
-                throw new Exception("Company not found!");
+                throw new ValidationException("Company not found!");
 
            this._context.Companies.Remove(company);
            this._context.SaveChanges();
@@ -105,7 +105,7 @@ namespace ProjectManagement.Services
 
             var doesUserExist = this._context.Users.Any(x=> x.Id == id);
             if (!doesUserExist)
-                throw new Exception("User not found!");
+                throw new ValidationException("User not found!");
 
             var companies = await this._context.Companies.Where(x => x.UserId == id).ToListAsync();
 
