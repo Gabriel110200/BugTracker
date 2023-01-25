@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using ProjectManagement.Models;
 using System;
@@ -38,6 +39,14 @@ namespace ProjectManagement.Middlewares
 
 
             }
+            catch(Microsoft.EntityFrameworkCore.DbUpdateException ex)
+            {
+                var logger = _logger.CreateLogger("APIException");
+               
+
+                await HandleFluentAPIException(httpContext, ex);
+
+            }
 
             catch (Exception ex)
             {
@@ -53,6 +62,19 @@ namespace ProjectManagement.Middlewares
 
         }
 
+        private async Task HandleFluentAPIException(HttpContext context, DbUpdateException ex)
+        {
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+
+
+
+            await context.Response.WriteAsync(new ErrorDetails()
+            {
+                StatusCode = context.Response.StatusCode,
+                Message = $"A validation has been violated: {ex.InnerException.Message}"
+            }.ToString());
+        }
 
         private async Task HandleValidationException(HttpContext context, Exception exception)
         {
