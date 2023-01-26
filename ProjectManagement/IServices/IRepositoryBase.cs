@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.IServices
 {
-    public interface IRepositoryBase<TEntity> 
+    public interface IRepositoryBase<TEntity>  where TEntity : class
     {
 
 
