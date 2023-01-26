@@ -14,3 +14,4 @@ Tecnologias e padrões usados:
  - Entity framework core
  - Fluent API 
  - Middlewares
+ - Repository Pattern 
