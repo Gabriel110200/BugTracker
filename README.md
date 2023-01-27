@@ -15,3 +15,4 @@ Tecnologias e padrões usados:
  - Fluent API 
  - Middlewares
  - Repository Pattern 
+ - SOLID
