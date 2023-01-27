@@ -3,11 +3,12 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.IServices
 {
-    public interface IUserService
+    public interface IUserService 
     {
 
         Task<IdentityResult> Register(IdentityUser user, string password);
 
+        Task<IdentityUser> Get(string id);
         
 
 

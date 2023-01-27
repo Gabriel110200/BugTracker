@@ -5,6 +5,8 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Data;
 using ProjectManagement.IServices;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManagement.Services
 {
@@ -16,14 +18,18 @@ namespace ProjectManagement.Services
         private readonly ApplicationDbContext _context;
 
 
-        public UserService(ApplicationDbContext context, UserManager<IdentityUser> userManager)
+        public UserService(ApplicationDbContext context, UserManager<IdentityUser> userManager) : base(context)
         {
             this.userManager = userManager;
             _context = context;
             this.userManager = userManager;
         }
 
+        public Task<IdentityUser> Get(string id)
+        {
 
+            return  this._context.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
 
         public async Task<IdentityResult> Register(IdentityUser user, string password)
         {

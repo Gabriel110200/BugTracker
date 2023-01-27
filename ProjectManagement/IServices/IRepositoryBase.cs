@@ -9,15 +9,15 @@ namespace ProjectManagement.IServices
     {
 
 
-        Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity,bool>> filter = null);
+        Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity,bool>> filter = null);
 
-        Task<TEntity> GetById(Guid id);
+        Task<TEntity> GetByIdAsync(Guid id);
 
         Task AddAsync(TEntity enity);
 
         Task DeleteAsync(TEntity entity);
 
-        Task Update(TEntity entity); 
+        Task UpdateAsync(TEntity entity); 
 
 
 
