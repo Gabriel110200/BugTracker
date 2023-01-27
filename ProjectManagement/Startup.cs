@@ -64,7 +64,7 @@ namespace ProjectManagement
                 options.JsonSerializerOptions.IgnoreNullValues = true;
             });
 
-            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IUserService, UserService>();
 
         }

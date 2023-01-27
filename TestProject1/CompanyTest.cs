@@ -31,7 +31,7 @@ namespace TestProject1
         public async Task CreateCompanyIsValid()
         {
 
-            var service = new CompanyService(this.context);
+            var service = new CompanyRepository(this.context);
 
             Company company = new Company()
             {
@@ -59,7 +59,7 @@ namespace TestProject1
             {
 
 
-                CompanyService service = new CompanyService(this.context);
+                CompanyRepository service = new CompanyRepository(this.context);
 
                 Company company = new Company()
                 {
@@ -92,7 +92,7 @@ namespace TestProject1
                 await PrepareDatabase();
 
 
-                var service = new CompanyService(this.context);
+                var service = new CompanyRepository(this.context);
 
                 var company = new Company()
                 {
@@ -129,7 +129,7 @@ namespace TestProject1
                 await PrepareDatabase();
 
 
-                var service = new CompanyService(this.context);
+                var service = new CompanyRepository(this.context);
 
                 var company = new Company()
                 {
@@ -165,7 +165,7 @@ namespace TestProject1
 
                 await PrepareDatabase();
 
-                var service= new CompanyService(this.context);
+                var service= new CompanyRepository(this.context);
 
                 await service.Delete(Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"));
 
@@ -191,7 +191,7 @@ namespace TestProject1
             try
             {
 
-                var service = new CompanyService(this.context);
+                var service = new CompanyRepository(this.context);
 
                 await service.Delete(Guid.Parse("a6e6315b-addd-4997-bbef-0bb7ce8827c3"));
 
@@ -216,7 +216,7 @@ namespace TestProject1
                 await PrepareDatabase();
 
 
-                var service = new CompanyService(this.context);
+                var service = new CompanyRepository(this.context);
 
                 var companies = await service.GetOwnedUserCompanies("59cc8c06-319a-424f-843d-aa66deed3c00");
 
@@ -236,7 +236,7 @@ namespace TestProject1
         {
             try
             {
-                var service = new CompanyService(this.context);
+                var service = new CompanyRepository(this.context);
 
                 var companies = await service.GetOwnedUserCompanies("59cc8c06-319a-424f-843d-aa66deed3c00");
 

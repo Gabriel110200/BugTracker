@@ -31,19 +31,24 @@ namespace ProjectManagement.Services
         }
 
 
-        public async Task<IEnumerable<TEntity>> Get(Expression<Func<TEntity, bool>> filter = null)
+        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null)
         {
             return await context.Set<TEntity>().ToListAsync();
         }
 
-        public async Task<TEntity> GetById(Guid id)
+        public async Task<TEntity> GetByIdAsync(Guid id)
         {
             return await context.Set<TEntity>().FindAsync(id); 
         }
 
-        public Task Update(TEntity entity)
+        public async Task UpdateAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            context.Entry(entity).State = EntityState.Modified;
+
+             context.Set<TEntity>().Update(entity);
+            await context.SaveChangesAsync();
+
+           
         }
 
 
