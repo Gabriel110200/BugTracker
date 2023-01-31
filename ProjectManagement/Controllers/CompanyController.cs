@@ -25,10 +25,9 @@ namespace ProjectManagement.Controllers
         private IUserService _userService;
         private readonly ApplicationDbContext _context;
 
-        public CompanyController(ICompanyRepository CompanyRepository, ApplicationDbContext context,IUserService userService)
+        public CompanyController(ICompanyRepository CompanyRepository, IUserService userService)
         {
             _company = CompanyRepository;
-            _context = context;
             _userService = userService;
         }
 
