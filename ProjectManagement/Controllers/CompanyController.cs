@@ -21,13 +21,13 @@ namespace ProjectManagement.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
 
-        private ICompanyRepository _company;
+        private ICompanyRepository companyRepository;
         private IUserService _userService;
         private readonly ApplicationDbContext _context;
 
         public CompanyController(ICompanyRepository CompanyRepository, IUserService userService)
         {
-            _company = CompanyRepository;
+            companyRepository = CompanyRepository;
             _userService = userService;
         }
 
@@ -39,21 +39,18 @@ namespace ProjectManagement.Controllers
         public async Task<IActionResult> CreateCompany(Company company)
         {
 
-            validateCompany(company);
-            await _company.AddAsync(company);
-            var CompanyCreated = await _company.GetByIdAsync(company.Id);
+            validateNewCompany(company);
+            await companyRepository.AddAsync(company);
+            var CompanyCreated = await companyRepository.GetByIdAsync(company.Id);
             return Created(string.Empty,CompanyCreated);
 
         }
 
 
-        private void validateCompany(Company company)
+        private void validateNewCompany(Company company)
         {
-            if (this._company.IsCompanyAlreadyRegistered(company.CNPJ))
+            if (companyRepository.IsCompanyAlreadyRegistered(company))
                 throw new ValidationException("Company was already registered!");
-
-            if (this._company.IsCompanyAlreadyRegisteredSameName(company.Name))
-                throw new ValidationException("There is a company regitered with that name!");
 
             if (!Helpers.ValidateCnpj(company.CNPJ))
                 throw new ValidationException("CNPJ is invalid!");
@@ -69,9 +66,12 @@ namespace ProjectManagement.Controllers
             var doesUserExist = await _userService.Get(userId);
 
             if (doesUserExist is null)
-                throw new ValidationException("User not found!");
+                throw new ValidationException("The specified user does not exist in our system");
 
-            var companies =  await this._company.GetOwnedUserCompanies(userId);
+            var companies =  await this.companyRepository.GetOwnedUserCompanies(userId);
+
+            if (companies is null)
+                return NotFound();
 
             return Ok(companies);
 

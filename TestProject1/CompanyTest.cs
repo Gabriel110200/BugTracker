@@ -64,8 +64,6 @@ namespace TestProject1
 
             this.companyRepository.Verify(x => x.AddAsync(company), Times.Once); 
 
-
-
         }
 
 
