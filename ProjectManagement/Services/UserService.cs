@@ -18,7 +18,7 @@ namespace ProjectManagement.Services
         private readonly ApplicationDbContext _context;
 
 
-        public UserService(ApplicationDbContext context, UserManager<IdentityUser> userManager) : base(context)
+        public UserService(ApplicationDbContext context, UserManager<IdentityUser> userManager) 
         {
             this.userManager = userManager;
             _context = context;

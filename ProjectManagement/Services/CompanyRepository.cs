@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.WebEncoders.Testing;
 using ProjectManagement.Data;
 using ProjectManagement.Helper;
 using ProjectManagement.IServices;
@@ -8,6 +9,8 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.Services
@@ -26,15 +29,12 @@ namespace ProjectManagement.Services
             return  await context.Companies.Where(x => x.UserId == id).ToListAsync();
         }
 
-        public bool IsCompanyAlreadyRegistered(string cnpj)
+        public bool IsCompanyAlreadyRegistered(Company company)
         {
-            return this.context.Companies.Any(x => x.CNPJ == cnpj);
+            return this.context.Companies.Any(x => x.CNPJ == company.CNPJ || x.Name == company.Name );
         }
 
-        public bool IsCompanyAlreadyRegisteredSameName(string name)
-        {
-            return this.context.Companies.Any(x => x.CNPJ == name);
-        }
+
 
 
         //public async Task<List<Company>> GetOwnedUserCompanies(string id)

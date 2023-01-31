@@ -12,7 +12,7 @@ namespace ProjectManagement.IServices
 
          Task<List<Company>> GetOwnedUserCompanies(string id);
 
-        bool IsCompanyAlreadyRegistered(string cnpj);
+        bool IsCompanyAlreadyRegistered(Company company);
 
 
         bool IsCompanyAlreadyRegisteredSameName(string name);
