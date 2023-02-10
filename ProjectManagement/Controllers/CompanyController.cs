@@ -56,6 +56,8 @@ namespace ProjectManagement.Controllers
                 throw new ValidationException("CNPJ is invalid!");
         }
 
+        
+
 
         [HttpGet("[Action]/{userId}")]
 

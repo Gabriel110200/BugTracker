@@ -7,6 +7,7 @@ using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -67,33 +68,21 @@ namespace TestProject1
         }
 
 
-        //[TestMethod]
-        //public async Task CreateCompanyCNPJ_IsInvalid()
-        //{
+        [TestMethod]
+        public async Task CreateCompanyCNPJ_IsInvalid()
+        {
 
+            CompanyRepository service = new CompanyRepository(this.context);
 
-        //    try
-        //    {
+            Company company = new Company()
+            {
+                    Name = "Empresa Teste",
+                    CNPJ = "111111111"
+            };
 
+            await Assert.ThrowsExceptionAsync<ValidationException>(() => service.AddAsync(company));
 
-        //        CompanyRepository service = new CompanyRepository(this.context);
-
-        //        Company company = new Company()
-        //        {
-        //            Name = "Empresa Teste",
-        //            CNPJ = "111111111"
-        //        };
-
-        //        await service.Create(company);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Assert.AreEqual("CNPJ is invalid!", ex.Message);
-        //    }
-
-
-        //}
+        }
 
 
 
@@ -134,42 +123,6 @@ namespace TestProject1
 
         //}
 
-        //[TestMethod]
-
-        //public async Task SameNameCompany()
-        //{
-
-
-        //    try
-        //    {
-
-        //        await PrepareDatabase();
-
-
-        //        var service = new CompanyRepository(this.context);
-
-        //        var company = new Company()
-        //        {
-        //            UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
-        //            Name = "Empresa Test",
-        //            CNPJ = "53.384.888/0001-70",
-
-        //        };
-
-        //        await service.Create(company);
-
-        //        Assert.Fail();
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        Assert.AreEqual("There is a company regitered with that name!", ex.Message);
-
-        //    }
-
-
-        //}
 
 
         //[TestMethod]
@@ -187,7 +140,7 @@ namespace TestProject1
         //        await service.Delete(Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"));
 
         //        Assert.IsFalse(this.context.Companies.Any(x => x.Id == Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"))); 
-                
+
 
 
 
@@ -214,7 +167,7 @@ namespace TestProject1
 
         //        Assert.Fail();
 
-                
+
 
         //    }catch(Exception ex)
         //    {

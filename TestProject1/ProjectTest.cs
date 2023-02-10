@@ -80,7 +80,7 @@ namespace TestProject1
             {
 
 
-                var service = new ProjectServices(this.context);
+                var service = new ProjectRepository(this.context);
 
                 Project project = new Project()
                 {
@@ -111,7 +111,7 @@ namespace TestProject1
 
                 PrepararDatabase();
 
-                var service = new ProjectServices(this.context);
+                var service = new ProjectRepository(this.context);
                 var projects = await service.ListAllProjects(Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
                 Assert.IsInstanceOfType(projects, typeof(List<Project>));
 
@@ -135,7 +135,7 @@ namespace TestProject1
             try
             {
 
-                ProjectServices service = new ProjectServices(this.context);
+                ProjectRepository service = new ProjectRepository(this.context);
                 service.Delete(Guid.Parse("a3485d47-f1a9-4b40-ba15-acd9f251c4dd"));
 
 
@@ -158,7 +158,7 @@ namespace TestProject1
             {
 
                 PrepararDatabase();
-                ProjectServices service = new ProjectServices(this.context);
+                ProjectRepository service = new ProjectRepository(this.context);
                 var wasProjectDeleted = service.Delete(Guid.Parse("0b93cf51-4927-4097-bf76-9e1fc165ea24"));
                 Assert.IsTrue(wasProjectDeleted);
 

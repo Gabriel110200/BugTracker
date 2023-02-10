@@ -14,13 +14,6 @@ namespace ProjectManagement.IServices
 
         bool IsCompanyAlreadyRegistered(Company company);
 
-
-        bool IsCompanyAlreadyRegisteredSameName(string name);
-
-
-
-
-
         // Task<bool> RegisterAdmins(Guid CompanyId, User User);
 
 

@@ -20,8 +20,8 @@ namespace ProjectManagement.Services
 
         public async Task AddAsync(TEntity entity)
         {
-             await   this.context.Set<TEntity>().AddAsync(entity);
-             await   this.context.SaveChangesAsync();
+             await  this.context.Set<TEntity>().AddAsync(entity);
+             await  this.context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(TEntity entity)

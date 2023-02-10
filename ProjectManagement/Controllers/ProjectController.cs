@@ -15,14 +15,14 @@ namespace ProjectManagement.Controllers
 {
     public class ProjectController : Controller
     {
-        private IProjectService _project;
-        private readonly ApplicationDbContext _context;
+        private IProjectRepository _projectRepository;
+   
 
 
-        public ProjectController(IProjectService ProjectService, ApplicationDbContext context)
+        public ProjectController(IProjectRepository ProjectRepository)
         {
-            _project = ProjectService;
-            _context = context;
+            _projectRepository = ProjectRepository;
+            
 
         }
 
@@ -30,8 +30,9 @@ namespace ProjectManagement.Controllers
 
         public async Task<IActionResult> CreateProject(Project project)
         {
-            await _project.Create(project);
-            return Created(string.Empty,"");
+            await _projectRepository.AddAsync(project);
+            var CreatedProject = await _projectRepository.GetByIdAsync(project.Id);
+            return Created(string.Empty,CreatedProject);
 
         }
 
@@ -41,7 +42,7 @@ namespace ProjectManagement.Controllers
         public async Task<IActionResult> UpdateProject(Project project)
         {
 
-            await _project.Update(project);
+            await _projectRepository.Update(project);
             return Ok();
 
 
@@ -52,7 +53,7 @@ namespace ProjectManagement.Controllers
         [HttpGet("/[Controller]/[Action]")]
         public async Task<List<Project>> Read(Guid CompanyId)
         {
-            var projects = await _project.ListAllProjects(CompanyId);
+            var projects = await _projectRepository.ListAllProjects(CompanyId);
             return projects;
 
         }
@@ -64,7 +65,7 @@ namespace ProjectManagement.Controllers
 
         public  IActionResult Delete(Guid projectId)
         {
-            var isProjectDeleted =  _project.Delete(projectId);
+            var isProjectDeleted =  _projectRepository.Delete(projectId);
             return NoContent();
 
         }
