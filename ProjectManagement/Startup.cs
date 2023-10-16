@@ -7,8 +7,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using ProjectManagement.Data;
 using ProjectManagement.IServices;
+using ProjectManagement.Middlewares;
 using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System;
@@ -31,10 +35,10 @@ namespace ProjectManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
+            options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-
+          
 
             services.AddDefaultIdentity<IdentityUser>(
                 options => options.SignIn.RequireConfirmedAccount = true
@@ -48,25 +52,32 @@ namespace ProjectManagement
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
 
-
                 // User settings.
                 options.User.AllowedUserNameCharacters =
                 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
                 options.User.RequireUniqueEmail = true;
             });
 
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BugTracker", Version = "v1" });
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
+            services.AddControllers().AddJsonOptions(options => {
+                options.JsonSerializerOptions.IgnoreNullValues = true;
+            });
 
-
-            services.AddScoped<ICompanyService, CompanyService>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IUserService, UserService>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env ,ILoggerFactory logger)
         {
             if (env.IsDevelopment())
             {
@@ -82,6 +93,17 @@ namespace ProjectManagement
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1");
+            });
+
+            //   app.UseAPiExceptionHandler(logger);
+
+            app.ConfigureCustomExceptionMiddleware();
+
             app.UseRouting();
 
             app.UseAuthentication();
@@ -95,5 +117,8 @@ namespace ProjectManagement
                 endpoints.MapRazorPages();
             });
         }
+
+       
+
     }
 }

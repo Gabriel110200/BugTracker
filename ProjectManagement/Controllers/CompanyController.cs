@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using ProjectManagement.Data;
+using ProjectManagement.Helper;
 using ProjectManagement.IServices;
 using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 
@@ -16,42 +21,42 @@ namespace ProjectManagement.Controllers
     {
         private readonly UserManager<IdentityUser> userManager;
 
-        private ICompanyService _company;
+        private ICompanyRepository companyRepository;
         private IUserService _userService;
+        private readonly ApplicationDbContext _context;
 
-        public CompanyController(ICompanyService CompanyService, UserManager<IdentityUser> userManager, IUserService userService)
+        public CompanyController(ICompanyRepository CompanyRepository, IUserService userService)
         {
-            _company = CompanyService;
-            this.userManager = userManager;
+            companyRepository = CompanyRepository;
             _userService = userService;
         }
 
-        [HttpGet("[Action]")]
 
-        public async  Task<IActionResult> teste()
+
+
+        [HttpPost("[Action]")]
+
+        public async Task<IActionResult> CreateCompany(Company company)
         {
+
+            validateNewCompany(company);
+            await companyRepository.AddAsync(company);
+            var CompanyCreated = await companyRepository.GetByIdAsync(company.Id);
+            return Created(string.Empty,CompanyCreated);
+
+        }
+
+
+        private void validateNewCompany(Company company)
+        {
+            if (companyRepository.IsCompanyAlreadyRegistered(company))
+                throw new ValidationException("Company was already registered!");
+
+            if (!Helpers.ValidateCnpj(company.CNPJ))
+                throw new ValidationException("CNPJ is invalid!");
+        }
 
         
-
-              
-
-
-
-            return Ok("haa");
-        }
-
-
-        [HttpPost("/[Action]/{id}")]
-
-        public async Task<IActionResult> CreateCompany(Company company,[FromRoute] Guid UserId)
-        {
-
-
-            var isCompanyCreated = await _company.Create(company);
-
-            return Created(string.Empty,isCompanyCreated);
-
-        }
 
 
         [HttpGet("[Action]/{userId}")]
@@ -60,11 +65,22 @@ namespace ProjectManagement.Controllers
         {
 
 
-            var companies = this._company.GetOwnedUserCompanies(userId);
+            var doesUserExist = await _userService.Get(userId);
+
+            if (doesUserExist is null)
+                throw new ValidationException("The specified user does not exist in our system");
+
+            var companies =  await this.companyRepository.GetOwnedUserCompanies(userId);
+
+            if (companies is null)
+                return NotFound();
 
             return Ok(companies);
 
         }
+
+
+        
 
 
 

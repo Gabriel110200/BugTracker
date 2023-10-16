@@ -36,9 +36,13 @@ namespace ProjectManagement.Map
                    .WithMany()
                    .HasForeignKey(x => x.UserId);
 
-            builder.HasMany(x => x.Teams)
-                    .WithOne()
-                    .HasForeignKey(x=> x.CompanyId_FK);
+            builder.Property(x => x.UserId)
+                   .IsRequired();
+
+
+            //builder.HasMany(x => x.Teams)
+            //        .WithOne()
+            //        .HasForeignKey(x=> x.CompanyId_FK);
 
 
             

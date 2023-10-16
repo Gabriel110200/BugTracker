@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Data;
 using ProjectManagement.IServices;
+using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System.Threading.Tasks;
 
@@ -21,18 +22,27 @@ namespace ProjectManagement.Controllers
 
 
         [HttpPost("[Action]")]
-        public async Task<IActionResult> CreateUser(IdentityUser user)
+        public async Task<IActionResult> RegisterUser(UserRequest request)
         {
 
-            var wasUserRegistered = await this._userService.Register(user, "teste12345");
+            var iUser = new IdentityUser
+            {
+                UserName = request.UserName,
+                Email = request.Mail,
+            };
+
+
+            var wasUserRegistered = await this._userService.Register(iUser, request.Password);
 
             if (wasUserRegistered.Succeeded)
-                return Created("~/api/CreateUser", new { User = user});
+                return Created("~/api/CreateUser", new { User = iUser});
 
             return BadRequest(wasUserRegistered);
 
 
         }
+
+
 
 
 

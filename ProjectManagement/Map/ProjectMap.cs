@@ -19,22 +19,23 @@ namespace ProjectManagement.Map
                 .HasColumnType("varchar(20)")
                 .IsRequired();
 
-            builder
-                .Property(x => x.CreatedDate)
-                .HasColumnType("date");
-
-            builder
-                .Property(x => x.DeadLine)
-                .HasColumnType("date");
 
             builder.HasOne(x => x.Company)
                    .WithMany()
-                   .IsRequired();
+                   .IsRequired()
+                   .OnDelete(DeleteBehavior.Cascade);
 
-            builder
-                .HasMany(x => x.Team)
-                .WithOne(x => x.AssignedProject)
-                .OnDelete(DeleteBehavior.Cascade);
+            //builder
+            //    .HasMany(x => x.Team)
+            //    .WithOne(x => x.AssignedProject)
+            //    .OnDelete(DeleteBehavior.Cascade);
+
+         
+
+            builder.Property(x => x.Status)
+                   .HasMaxLength(50) 
+                   .HasConversion<string>()
+                   .IsRequired();
 
 
             builder

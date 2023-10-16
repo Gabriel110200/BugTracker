@@ -1,12 +1,28 @@
-﻿using ProjectManagement.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using ProjectManagement.Models;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.Helper
 {
     public class Helpers
     {
+
+
+        public static ContentResult CreateResult(HttpStatusCode httpStatusCode,string content="")
+        {
+
+            var contentResult = new ContentResult();
+            contentResult.StatusCode = (int)httpStatusCode;
+            contentResult.Content = content;
+            return contentResult;
+
+        }
+
+
+
 
         public static bool ValidateCnpj(string cnpj)
         {

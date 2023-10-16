@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjectManagement.Enum;
+using System;
 using System.Collections.Generic;
 
 namespace ProjectManagement.Models
@@ -13,16 +14,15 @@ namespace ProjectManagement.Models
 
         public Guid CompanyId_FK { get; set; }
 
-
         public Company Company { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public bool IsActive { get; set; }
 
-        public DateTime DeadLine { get; set; }
+        public ProjectStatus Status { get; set; }
 
-        public Guid TeamId_FK { get; set; }
+     //   public Guid TeamId_FK { get; set; }
 
-        public List<Team> Team { get; set; }
+      //  public List<Team> Team { get; set; }
 
         public List<Ticket> Tickets { get; set; }
 

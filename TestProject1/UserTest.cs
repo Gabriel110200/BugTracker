@@ -17,7 +17,7 @@ namespace TestProject1
     {
 
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager; 
+        private readonly SignInManager<User> _signInManager;
         public ApplicationDbContext context;
 
 
@@ -27,7 +27,7 @@ namespace TestProject1
             Connect connect = new Connect();
 
             this.context = connect.CriarContextInMemory();
-     
+
 
         }
 
@@ -64,7 +64,7 @@ namespace TestProject1
 
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Assert.Fail();
             }

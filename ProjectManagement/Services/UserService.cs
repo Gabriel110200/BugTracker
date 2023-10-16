@@ -5,6 +5,8 @@ using System;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Data;
 using ProjectManagement.IServices;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProjectManagement.Services
 {
@@ -23,15 +25,19 @@ namespace ProjectManagement.Services
             this.userManager = userManager;
         }
 
+        public Task<IdentityUser> Get(string id)
+        {
 
+            return  this._context.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
 
         public async Task<IdentityResult> Register(IdentityUser user, string password)
         {
-
+          
 
             try
             {
-                var wasUserRegistered = await this.userManager.CreateAsync(user, "temp123465");
+                var wasUserRegistered = await this.userManager.CreateAsync(user, password);
 
                 return wasUserRegistered;
 
@@ -45,5 +51,6 @@ namespace ProjectManagement.Services
 
 
         }
+
     }
 }

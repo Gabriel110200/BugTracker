@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProjectManagement.Data;
 
 namespace ProjectManagement.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230109013448_addProjectStatus")]
+    partial class addProjectStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -254,7 +256,6 @@ namespace ProjectManagement.Data.Migrations
                         .HasColumnType("varchar(30)");
 
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -288,6 +289,9 @@ namespace ProjectManagement.Data.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("TeamId_FK")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
@@ -299,9 +303,6 @@ namespace ProjectManagement.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("AssignedProjectId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CompanyId")
@@ -320,22 +321,27 @@ namespace ProjectManagement.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("varchar(30)");
 
                     b.Property<Guid>("ProjectId_FK")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
+                    b.Property<string>("Rating")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
                     b.Property<int>("UndoneProjects")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AssignedProjectId");
-
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("CompanyId_FK");
+
+                    b.HasIndex("ProjectId_FK");
 
                     b.ToTable("Teams");
                 });
@@ -483,9 +489,7 @@ namespace ProjectManagement.Data.Migrations
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Admin")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ProjectManagement.Models.Project", b =>
@@ -497,13 +501,21 @@ namespace ProjectManagement.Data.Migrations
 
             modelBuilder.Entity("ProjectManagement.Models.Team", b =>
                 {
-                    b.HasOne("ProjectManagement.Models.Project", "AssignedProject")
-                        .WithMany()
-                        .HasForeignKey("AssignedProjectId");
-
                     b.HasOne("ProjectManagement.Models.Company", "Company")
                         .WithMany()
                         .HasForeignKey("CompanyId");
+
+                    b.HasOne("ProjectManagement.Models.Company", null)
+                        .WithMany("Teams")
+                        .HasForeignKey("CompanyId_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ProjectManagement.Models.Project", "AssignedProject")
+                        .WithMany("Team")
+                        .HasForeignKey("ProjectId_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ProjectManagement.Models.Ticket", b =>

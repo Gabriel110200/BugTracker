@@ -15,39 +15,48 @@ namespace ProjectManagement.Controllers
 {
     public class ProjectController : Controller
     {
-        private IProjectService _project;
-        private readonly ApplicationDbContext _context;
+        private IProjectRepository _projectRepository;
+   
 
 
-        public ProjectController(IProjectService ProjectService, ApplicationDbContext context)
+        public ProjectController(IProjectRepository ProjectRepository)
         {
-            _project = ProjectService;
-            _context = context;
+            _projectRepository = ProjectRepository;
+            
 
         }
 
         [HttpPost("/[Controller]/[Action]")]
 
-
-        public async Task<IActionResult> CreateProject(Project project,Guid CompanyId)
+        public async Task<IActionResult> CreateProject([FromBody] Project project)
         {
-            var isCompanyCreated = await _project.Create(project, CompanyId);
+            await _projectRepository.AddAsync(project);
+            var CreatedProject = await _projectRepository.GetByIdAsync(project.Id);
+            return Created(string.Empty,CreatedProject);
 
-            return Created(string.Empty, isCompanyCreated);
+        }
+
+
+        [HttpPost("/[Controller]/[Action]")]
+
+        public async Task<IActionResult> UpdateProject([FromBody]  Project project)
+        {
+
+            await _projectRepository.UpdateAsync(project);
+            return Ok();
+
 
         }
 
 
 
-
         [HttpGet("/[Controller]/[Action]")]
-
-
         public async Task<List<Project>> Read(Guid CompanyId)
         {
-            var projects = await _project.ListAllProjects(CompanyId);
+            // var projects = await _projectRepository.ListAllProjects(CompanyId);
+            //  return projects;
 
-            return projects;
+            throw new NotImplementedException();
 
         }
 
@@ -58,8 +67,7 @@ namespace ProjectManagement.Controllers
 
         public  IActionResult Delete(Guid projectId)
         {
-            var isProjectDeleted =  _project.Delete(projectId);
-
+            //var isProjectDeleted =  _projectRepository.DeleteAsync(projectId);
             return NoContent();
 
         }

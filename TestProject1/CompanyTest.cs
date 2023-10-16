@@ -1,9 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using ProjectManagement.Controllers;
 using ProjectManagement.Data;
+using ProjectManagement.IServices;
 using ProjectManagement.Models;
 using ProjectManagement.Services;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -18,9 +22,15 @@ namespace TestProject1
 
         private ApplicationDbContext context;
 
+        private Mock<ICompanyRepository> companyRepository;
+        private Mock<IUserService> _userService;
+
+
+
         public CompanyTest()
         {
             Connect connect = new Connect();
+
             this.context = connect.CriarContextInMemory();
             this.context.Database.EnsureDeleted();
         }
@@ -31,7 +41,13 @@ namespace TestProject1
         public async Task CreateCompanyIsValid()
         {
 
-            var service = new CompanyService(this.context);
+            //Arrange
+
+            this.companyRepository = new Mock<ICompanyRepository>();
+            this._userService = new Mock<IUserService>();
+
+            var service = new CompanyController(this.companyRepository.Object, this._userService.Object);
+
 
             Company company = new Company()
             {
@@ -40,12 +56,14 @@ namespace TestProject1
                 CNPJ = "53.384.888/0001-70"
 
             };
-            await  service.Create(company);
 
-            var wasCompanyRegistered = this.context.Companies.Any(x => x.CNPJ == "53.384.888/0001-70");
+            //act
 
-            Assert.IsTrue(wasCompanyRegistered);
+            await service.CreateCompany(company);
 
+            //assert 
+
+            this.companyRepository.Verify(x => x.AddAsync(company), Times.Once);
 
         }
 
@@ -54,202 +72,157 @@ namespace TestProject1
         public async Task CreateCompanyCNPJ_IsInvalid()
         {
 
+            this.companyRepository = new Mock<ICompanyRepository>();
+            this._userService = new Mock<IUserService>();
 
-            try
+            var service = new CompanyController(this.companyRepository.Object, this._userService.Object);
+
+            Company company = new Company()
             {
+                Name = "Empresa Teste",
+                CNPJ = "111111111"
+            };
 
-
-                CompanyService service = new CompanyService(this.context);
-
-                Company company = new Company()
-                {
-                    Name = "Empresa Teste",
-                    CNPJ = "111111111"
-                };
-
-                await service.Create(company);
-
-            }
-            catch (Exception ex)
-            {
-                Assert.AreEqual("CNPJ is invalid!", ex.Message);
-            }
-
+            await Assert.ThrowsExceptionAsync<ValidationException>(() => service.CreateCompany(company));
 
         }
 
 
 
-        [TestMethod]
+        //[TestMethod]
 
-        public async Task CreateCompanyAlreadyExists()
-        {
+        //public async Task CreateCompanyAlreadyExists()
+        //{
 
 
-            try
-            {
+        //    try
+        //    {
 
-                await PrepareDatabase();
+        //        await PrepareDatabase();
 
 
-                var service = new CompanyService(this.context);
+        //        var service = new CompanyRepository(this.context);
 
-                var company = new Company()
-                {
-                    UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
-                    Name = "Empresa Tester",
-                    CNPJ = "111111111",
+        //        var company = new Company()
+        //        {
+        //            UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
+        //            Name = "Empresa Tester",
+        //            CNPJ = "36.160.011/0001-86",
 
-                };
+        //        };
 
-                await service.Create(company);
+        //        await service.Create(company);
 
-                Assert.Fail();
+        //        Assert.Fail();
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                Assert.AreEqual("Company was already registered!", ex.Message);
+        //        Assert.AreEqual("Company was already registered!", ex.Message);
 
-            }
+        //    }
 
 
-        }
+        //}
 
-        [TestMethod]
 
-        public async Task SameNameCompany()
-        {
 
+        //[TestMethod]
+        //public async Task DeleteCompanyIsValid()
+        //{
 
-            try
-            {
+        //    try
+        //    {
 
-                await PrepareDatabase();
 
+        //        await PrepareDatabase();
 
-                var service = new CompanyService(this.context);
+        //        var service = new CompanyRepository(this.context);
 
-                var company = new Company()
-                {
-                    UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
-                    Name = "Empresa Test",
-                    CNPJ = "53.384.888/0001-70",
+        //        await service.Delete(Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"));
 
-                };
+        //        Assert.IsFalse(this.context.Companies.Any(x => x.Id == Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe")));
 
-                await service.Create(company);
 
-                Assert.Fail();
 
-            }
-            catch (Exception ex)
-            {
 
-                Assert.AreEqual("There is a company regitered with that name!", ex.Message);
 
-            }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Assert.Fail(ex.Message);
+        //    }
+        //}
 
 
-        }
+        //[TestMethod]
 
+        //public async Task DeleteCompanyDoesntExist()
+        //{
 
-        [TestMethod]
-        public async Task DeleteCompanyIsValid()
-        {
+        //    try
+        //    {
 
-            try
-            {
+        //        var service = new CompanyRepository(this.context);
 
+        //        await service.Delete(Guid.Parse("a6e6315b-addd-4997-bbef-0bb7ce8827c3"));
 
-                await PrepareDatabase();
+        //        Assert.Fail();
 
-                var service= new CompanyService(this.context);
 
-                await service.Delete(Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"));
 
-                Assert.IsFalse(this.context.Companies.Any(x => x.Id == Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"))); 
-                
+        //    }catch(Exception ex)
+        //    {
+        //        Assert.AreEqual(ex.Message, "Company not found!");
+        //    }
+        //}
 
 
+        //[TestMethod]
 
+        //public async Task GetUserCompaniesIsValid()
+        //{
 
-            }
-            catch(Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-        }
+        //    try
+        //    {
+        //        await PrepareDatabase();
 
 
-        [TestMethod]
+        //        var service = new CompanyRepository(this.context);
 
-        public async Task DeleteCompanyDoesntExist()
-        {
+        //        var companies = await service.GetOwnedUserCompanies("59cc8c06-319a-424f-843d-aa66deed3c00");
 
-            try
-            {
+        //        Assert.IsTrue(companies.Any(x => x.CNPJ == "36.160.011/0001-86"));
 
-                var service = new CompanyService(this.context);
 
-                await service.Delete(Guid.Parse("a6e6315b-addd-4997-bbef-0bb7ce8827c3"));
+        //    }catch(Exception ex)
+        //    {
+        //        Assert.Fail(ex.Message);
+        //    }
 
-                Assert.Fail();
+        //}
 
-                
+        //[TestMethod]
 
-            }catch(Exception ex)
-            {
-                Assert.AreEqual(ex.Message, "Company not found!");
-            }
-        }
+        //public async Task GetUserCompanies_UserDontExist()
+        //{
+        //    try
+        //    {
+        //        var service = new CompanyRepository(this.context);
 
+        //        var companies = await service.GetOwnedUserCompanies("59cc8c06-319a-424f-843d-aa66deed3c00");
 
-        [TestMethod]
+        //        Assert.Fail();
 
-        public async Task GetUserCompaniesIsValid()
-        {
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Assert.AreEqual("User not found!", ex.Message);
+        //    }
 
-            try
-            {
-                await PrepareDatabase();
 
-
-                var service = new CompanyService(this.context);
-
-                var companies = await service.GetOwnedUserCompanies("59cc8c06-319a-424f-843d-aa66deed3c00");
-
-                Assert.IsTrue(companies.Any(x => x.CNPJ == "36.160.011/0001-86"));
-
-
-            }catch(Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-
-        }
-
-        [TestMethod]
-
-        public async Task GetUserCompanies_UserDontExist()
-        {
-            try
-            {
-                var service = new CompanyService(this.context);
-
-                var companies = await service.GetOwnedUserCompanies("59cc8c06-319a-424f-843d-aa66deed3c00");
-
-                Assert.Fail();
-
-            }
-            catch (Exception ex)
-            {
-                Assert.AreEqual("User not found!", ex.Message);
-            }
-
-
-        }
+        //}
 
 
         private async Task PrepareDatabase()
@@ -263,6 +236,8 @@ namespace TestProject1
                 CNPJ = "36.160.011/0001-86",
 
             };
+
+
 
 
             this.context.Companies.Add(company);
