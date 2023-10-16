@@ -28,7 +28,7 @@ namespace ProjectManagement.Controllers
 
         [HttpPost("/[Controller]/[Action]")]
 
-        public async Task<IActionResult> CreateProject(Project project)
+        public async Task<IActionResult> CreateProject([FromBody] Project project)
         {
             await _projectRepository.AddAsync(project);
             var CreatedProject = await _projectRepository.GetByIdAsync(project.Id);
@@ -39,10 +39,10 @@ namespace ProjectManagement.Controllers
 
         [HttpPost("/[Controller]/[Action]")]
 
-        public async Task<IActionResult> UpdateProject(Project project)
+        public async Task<IActionResult> UpdateProject([FromBody]  Project project)
         {
 
-            await _projectRepository.Update(project);
+            await _projectRepository.UpdateAsync(project);
             return Ok();
 
 
@@ -53,8 +53,10 @@ namespace ProjectManagement.Controllers
         [HttpGet("/[Controller]/[Action]")]
         public async Task<List<Project>> Read(Guid CompanyId)
         {
-            var projects = await _projectRepository.ListAllProjects(CompanyId);
-            return projects;
+            // var projects = await _projectRepository.ListAllProjects(CompanyId);
+            //  return projects;
+
+            throw new NotImplementedException();
 
         }
 
@@ -65,7 +67,7 @@ namespace ProjectManagement.Controllers
 
         public  IActionResult Delete(Guid projectId)
         {
-            var isProjectDeleted =  _projectRepository.Delete(projectId);
+            //var isProjectDeleted =  _projectRepository.DeleteAsync(projectId);
             return NoContent();
 
         }

@@ -25,10 +25,10 @@ namespace ProjectManagement.Map
                    .IsRequired()
                    .OnDelete(DeleteBehavior.Cascade);
 
-            builder
-                .HasMany(x => x.Team)
-                .WithOne(x => x.AssignedProject)
-                .OnDelete(DeleteBehavior.Cascade);
+            //builder
+            //    .HasMany(x => x.Team)
+            //    .WithOne(x => x.AssignedProject)
+            //    .OnDelete(DeleteBehavior.Cascade);
 
          
 

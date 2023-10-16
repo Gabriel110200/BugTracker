@@ -30,7 +30,7 @@ namespace TestProject1
         public CompanyTest()
         {
             Connect connect = new Connect();
-            
+
             this.context = connect.CriarContextInMemory();
             this.context.Database.EnsureDeleted();
         }
@@ -44,9 +44,9 @@ namespace TestProject1
             //Arrange
 
             this.companyRepository = new Mock<ICompanyRepository>();
-            this._userService = new Mock<IUserService>(); 
+            this._userService = new Mock<IUserService>();
 
-            var service = new CompanyController(this.companyRepository.Object,this._userService.Object);
+            var service = new CompanyController(this.companyRepository.Object, this._userService.Object);
 
 
             Company company = new Company()
@@ -60,10 +60,10 @@ namespace TestProject1
             //act
 
             await service.CreateCompany(company);
-            
+
             //assert 
 
-            this.companyRepository.Verify(x => x.AddAsync(company), Times.Once); 
+            this.companyRepository.Verify(x => x.AddAsync(company), Times.Once);
 
         }
 
@@ -72,15 +72,18 @@ namespace TestProject1
         public async Task CreateCompanyCNPJ_IsInvalid()
         {
 
-            CompanyRepository service = new CompanyRepository(this.context);
+            this.companyRepository = new Mock<ICompanyRepository>();
+            this._userService = new Mock<IUserService>();
+
+            var service = new CompanyController(this.companyRepository.Object, this._userService.Object);
 
             Company company = new Company()
             {
-                    Name = "Empresa Teste",
-                    CNPJ = "111111111"
+                Name = "Empresa Teste",
+                CNPJ = "111111111"
             };
 
-            await Assert.ThrowsExceptionAsync<ValidationException>(() => service.AddAsync(company));
+            await Assert.ThrowsExceptionAsync<ValidationException>(() => service.CreateCompany(company));
 
         }
 
@@ -135,18 +138,18 @@ namespace TestProject1
 
         //        await PrepareDatabase();
 
-        //        var service= new CompanyRepository(this.context);
+        //        var service = new CompanyRepository(this.context);
 
         //        await service.Delete(Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"));
 
-        //        Assert.IsFalse(this.context.Companies.Any(x => x.Id == Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"))); 
+        //        Assert.IsFalse(this.context.Companies.Any(x => x.Id == Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe")));
 
 
 
 
 
         //    }
-        //    catch(Exception ex)
+        //    catch (Exception ex)
         //    {
         //        Assert.Fail(ex.Message);
         //    }
@@ -234,7 +237,7 @@ namespace TestProject1
 
             };
 
-      
+
 
 
             this.context.Companies.Add(company);

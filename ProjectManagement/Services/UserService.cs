@@ -18,7 +18,7 @@ namespace ProjectManagement.Services
         private readonly ApplicationDbContext _context;
 
 
-        public UserService(ApplicationDbContext context, UserManager<IdentityUser> userManager) 
+        public UserService(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             this.userManager = userManager;
             _context = context;
@@ -33,11 +33,11 @@ namespace ProjectManagement.Services
 
         public async Task<IdentityResult> Register(IdentityUser user, string password)
         {
-
+          
 
             try
             {
-                var wasUserRegistered = await this.userManager.CreateAsync(user, "temp123465");
+                var wasUserRegistered = await this.userManager.CreateAsync(user, password);
 
                 return wasUserRegistered;
 
@@ -51,5 +51,6 @@ namespace ProjectManagement.Services
 
 
         }
+
     }
 }

@@ -10,39 +10,39 @@ namespace ProjectManagement.Map
     {
         public void Configure(EntityTypeBuilder<Team> builder)
         {
-            builder.HasKey(x => x.Id);
+            //builder.HasKey(x => x.Id);
 
-            builder.Property(x => x.Id).ValueGeneratedOnAdd();
+            //builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
-            builder.Property(x => x.Name)
-                   .HasColumnType("varchar(30)")
-                   .IsRequired();
+            //builder.Property(x => x.Name)
+            //       .HasColumnType("varchar(30)")
+            //       .IsRequired();
 
-            builder.Property(x => x.CreatedDate)
-                    .IsRequired();
-
-
-            builder.Property(x => x.CompletedProjects)
-                   .HasColumnType("int");
-
-            builder.Property(x => x.UndoneProjects)
-                   .HasColumnType("int");
+            //builder.Property(x => x.CreatedDate)
+            //        .IsRequired();
 
 
-            builder.Property(x => x.LateProjects)
-                   .HasColumnType("int");
+            //builder.Property(x => x.CompletedProjects)
+            //       .HasColumnType("int");
+
+            //builder.Property(x => x.UndoneProjects)
+            //       .HasColumnType("int");
 
 
-            builder.HasOne(x => x.AssignedProject)
-                   .WithMany(x => x.Team)
-                   .HasForeignKey(x => x.ProjectId_FK);
+            //builder.Property(x => x.LateProjects)
+            //       .HasColumnType("int");
 
-            builder.Property(x => x.LateProjects)
-                    .HasColumnType("int");
 
-            builder.Property(x => x.Rating)
-                   .HasMaxLength(20)
-                   .HasConversion<string>();
+            //builder.HasOne(x => x.AssignedProject)
+            //       .WithMany(x => x.Team)
+            //       .HasForeignKey(x => x.ProjectId_FK);
+
+            //builder.Property(x => x.LateProjects)
+            //        .HasColumnType("int");
+
+            //builder.Property(x => x.Rating)
+            //       .HasMaxLength(20)
+            //       .HasConversion<string>();
 
             
             //builder.Property(e => e.SyncConfig)

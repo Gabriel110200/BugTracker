@@ -15,7 +15,7 @@ namespace ProjectManagement.Controllers
     public class TicketController : ControllerBase
     {
 
-        private IProjectService _project;
+       // private IProjectService _project;
         private ITicketService _ticket;
         private readonly ApplicationDbContext _context;
 

@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using ProjectManagement.Data;
 using ProjectManagement.IServices;
 using ProjectManagement.Middlewares;
@@ -57,6 +58,12 @@ namespace ProjectManagement
                 options.User.RequireUniqueEmail = true;
             });
 
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BugTracker", Version = "v1" });
+            });
+
             services.AddControllersWithViews();
             services.AddRazorPages();
 
@@ -85,6 +92,13 @@ namespace ProjectManagement
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API Name v1");
+            });
 
             //   app.UseAPiExceptionHandler(logger);
 

@@ -20,9 +20,9 @@ namespace ProjectManagement.Models
 
         public ProjectStatus Status { get; set; }
 
-        public Guid TeamId_FK { get; set; }
+     //   public Guid TeamId_FK { get; set; }
 
-        public List<Team> Team { get; set; }
+      //  public List<Team> Team { get; set; }
 
         public List<Ticket> Tickets { get; set; }
 

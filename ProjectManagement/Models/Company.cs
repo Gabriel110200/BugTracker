@@ -21,7 +21,6 @@ namespace ProjectManagement.Models
         public string UserId { get; set; }
         public IdentityUser Admin { get; set; }
 
-        public List<Team>? Teams { get; set; }
 
 
     }

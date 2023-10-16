@@ -9,7 +9,8 @@ namespace ProjectManagement.IServices
         Task<IdentityResult> Register(IdentityUser user, string password);
 
         Task<IdentityUser> Get(string id);
-        
+
+
 
 
     }

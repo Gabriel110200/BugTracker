@@ -30,22 +30,24 @@ namespace TestProject1
             try
             {
 
-            
-            var ticket = new Ticket() { 
-                                        Id = Guid.Parse("9e062489-1d92-4874-a6db-2cdfbbecdc5e"), 
-                                        Title="bugTeste", 
-                                        Priority = ProjectManagement.Enum.TicketPriority.Low 
-                                        };
+
+                var ticket = new Ticket()
+                {
+                    Id = Guid.Parse("9e062489-1d92-4874-a6db-2cdfbbecdc5e"),
+                    Title = "bugTeste",
+                    Priority = ProjectManagement.Enum.TicketPriority.Low
+                };
 
                 var service = new TicketService(this.context);
 
                 await service.Create(ticket);
 
-             var wasTicketRegistered = this.context.Tickets.Any(x => x.Id == Guid.Parse("9e062489-1d92-4874-a6db-2cdfbbecdc5e"));
-             
+                var wasTicketRegistered = this.context.Tickets.Any(x => x.Id == Guid.Parse("9e062489-1d92-4874-a6db-2cdfbbecdc5e"));
+
                 Assert.IsTrue(wasTicketRegistered);
 
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 Assert.Fail(ex.Message);
             }

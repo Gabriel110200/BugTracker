@@ -40,9 +40,9 @@ namespace ProjectManagement.Map
                    .IsRequired();
 
 
-            builder.HasMany(x => x.Teams)
-                    .WithOne()
-                    .HasForeignKey(x=> x.CompanyId_FK);
+            //builder.HasMany(x => x.Teams)
+            //        .WithOne()
+            //        .HasForeignKey(x=> x.CompanyId_FK);
 
 
             
