@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ProjectManagement.Controllers;
@@ -6,15 +7,10 @@ using ProjectManagement.Data;
 using ProjectManagement.IServices;
 using ProjectManagement.Models;
 using ProjectManagement.Models.Request;
-using ProjectManagement.Services;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace TestProject1
 {
@@ -24,16 +20,22 @@ namespace TestProject1
 
         private ApplicationDbContext context;
 
-        private Mock<ICompanyRepository> companyRepository;
+        private Mock<ICompanyRepository> CompanyRepository;
         private Mock<IUserService> _userService;
-        private Mock<IUnitOfWork> UnitOfWork; 
+        private Mock<IUnitOfWork> UnitOfWork;
 
 
+        private CompanyController CompanyController;
 
         public CompanyTest()
         {
-            Connect connect = new Connect();
+            this._userService = new Mock<IUserService>();
+            this.UnitOfWork = new Mock<IUnitOfWork>();
+            this.CompanyRepository = new Mock<ICompanyRepository>();
+            this.UnitOfWork.Setup(u => u.GetCompanyRepository()).Returns(CompanyRepository.Object);
+            this.CompanyController = new CompanyController(this.UnitOfWork.Object, this._userService.Object);
         }
+
 
 
 
@@ -41,17 +43,8 @@ namespace TestProject1
         public async Task CreateCompanyIsValid()
         {
 
-            this._userService = new Mock<IUserService>();
-            this.UnitOfWork = new Mock<IUnitOfWork>();
-            var companyRepository = new Mock<ICompanyRepository>();
-            this.UnitOfWork.Setup(u => u.GetCompanyRepository()).Returns(companyRepository.Object);
-
-            companyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>()))
+            this.CompanyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>()))
                    .Returns(false);
-
-
-
-            var service = new CompanyController(this.UnitOfWork.Object, this._userService.Object);
 
 
             CompanyRequest company = new CompanyRequest()
@@ -65,10 +58,10 @@ namespace TestProject1
             Company comp = new Company();
 
 
-            await service.CreateCompany(company);
+            await this.CompanyController.CreateCompany(company);
 
 
-            companyRepository.Verify(x => x.AddAsync(It.IsAny<Company>()), Times.Once);
+            CompanyRepository.Verify(x => x.AddAsync(It.IsAny<Company>()), Times.Once);
 
         }
 
@@ -77,16 +70,8 @@ namespace TestProject1
         public async Task CreateCompanyCNPJ_IsInvalid()
         {
 
-            this._userService = new Mock<IUserService>();
-            this.UnitOfWork = new Mock<IUnitOfWork>();
-            var companyRepository = new Mock<ICompanyRepository>();
-            this.UnitOfWork.Setup(u => u.GetCompanyRepository()).Returns(companyRepository.Object);
-
-            companyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>()))
+            this.CompanyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>()))
                    .Returns(false);
-
-
-            var service = new CompanyController(this.UnitOfWork.Object, this._userService.Object);
 
             CompanyRequest company = new CompanyRequest()
             {
@@ -94,7 +79,7 @@ namespace TestProject1
                 CNPJ = "111111111"
             };
 
-           var result=  await service.CreateCompany(company);
+           var result=  await this.CompanyController.CreateCompany(company);
 
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
             var badRequestResult = (BadRequestObjectResult)result;
@@ -107,24 +92,11 @@ namespace TestProject1
 
 
         [TestMethod]
-
         public async Task CreateCompanyAlreadyExists()
         {
 
-
-            try
-            {
-
-                this._userService = new Mock<IUserService>();
-                this.UnitOfWork = new Mock<IUnitOfWork>();
-                var companyRepository = new Mock<ICompanyRepository>();
-                this.UnitOfWork.Setup(u => u.GetCompanyRepository()).Returns(companyRepository.Object);
-
-                companyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>()))
+                this.CompanyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>()))
                        .Returns(true);
-
-
-                var service = new CompanyController(this.UnitOfWork.Object, this._userService.Object);
 
                 var company = new CompanyRequest()
                 {
@@ -134,19 +106,35 @@ namespace TestProject1
 
                 };
 
-                var result = await service.CreateCompany(company);
+                var result = await this.CompanyController.CreateCompany(company);
 
                 Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
                 var badRequestResult = (BadRequestObjectResult)result;
                 Assert.AreEqual(400, badRequestResult.StatusCode);
 
-            }
-            catch (Exception ex)
-            {
 
-                Assert.AreEqual("Company was already registered!", ex.Message);
+        }
 
-            }
+
+        [TestMethod]
+        public async Task GetUserCompanyIsValid()
+        {
+
+
+           // var user = new IdentityUser();
+           // List<Company> company = new List<Company>() { new Company()};
+
+           //// this.CompanyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>())).Returns(false);
+
+
+           //  this._userService.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(user);
+
+           // this.CompanyRepository.Setup(x => x.GetOwnedUserCompanies(It.IsAny<string>())).ReturnsAsync(company);
+
+           // var result = await this.CompanyController.GetUserCompanies("b95b3400-787f-493a-bdd7-3eed4897e441");
+
+
+           // Assert.IsInstanceOfType(result, typeof(OkObjectResult));
 
 
         }
