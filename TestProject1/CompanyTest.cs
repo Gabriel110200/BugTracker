@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using ProjectManagement.Controllers;
 using ProjectManagement.Data;
@@ -32,9 +33,6 @@ namespace TestProject1
         public CompanyTest()
         {
             Connect connect = new Connect();
-
-           // this.context = connect.CriarContextInMemory();
-           // this.context.Database.EnsureDeleted();
         }
 
 
@@ -44,8 +42,12 @@ namespace TestProject1
         {
 
             this._userService = new Mock<IUserService>();
-            this.UnitOfWork = new Mock<IUnitOfWork>(); 
+            this.UnitOfWork = new Mock<IUnitOfWork>();
+            var companyRepository = new Mock<ICompanyRepository>();
+            this.UnitOfWork.Setup(u => u.GetCompanyRepository()).Returns(companyRepository.Object);
 
+            companyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>()))
+                   .Returns(false);
 
 
 
@@ -66,7 +68,7 @@ namespace TestProject1
             await service.CreateCompany(company);
 
 
-            this.companyRepository.Verify(x => x.AddAsync(comp), Times.Once);
+            companyRepository.Verify(x => x.AddAsync(It.IsAny<Company>()), Times.Once);
 
         }
 
@@ -75,8 +77,14 @@ namespace TestProject1
         public async Task CreateCompanyCNPJ_IsInvalid()
         {
 
-            this.UnitOfWork = new Mock<IUnitOfWork>();
             this._userService = new Mock<IUserService>();
+            this.UnitOfWork = new Mock<IUnitOfWork>();
+            var companyRepository = new Mock<ICompanyRepository>();
+            this.UnitOfWork.Setup(u => u.GetCompanyRepository()).Returns(companyRepository.Object);
+
+            companyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>()))
+                   .Returns(false);
+
 
             var service = new CompanyController(this.UnitOfWork.Object, this._userService.Object);
 
@@ -86,48 +94,65 @@ namespace TestProject1
                 CNPJ = "111111111"
             };
 
-            await Assert.ThrowsExceptionAsync<ValidationException>(() => service.CreateCompany(company));
+           var result=  await service.CreateCompany(company);
+
+            Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+            var badRequestResult = (BadRequestObjectResult)result;
+            Assert.AreEqual(400, badRequestResult.StatusCode);
+
+       
 
         }
 
 
 
-        //[TestMethod]
+        [TestMethod]
 
-        //public async Task CreateCompanyAlreadyExists()
-        //{
-
-
-        //    try
-        //    {
-
-        //        await PrepareDatabase();
+        public async Task CreateCompanyAlreadyExists()
+        {
 
 
-        //        var service = new CompanyRepository(this.context);
+            try
+            {
 
-        //        var company = new Company()
-        //        {
-        //            UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
-        //            Name = "Empresa Tester",
-        //            CNPJ = "36.160.011/0001-86",
+                this._userService = new Mock<IUserService>();
+                this.UnitOfWork = new Mock<IUnitOfWork>();
+                var companyRepository = new Mock<ICompanyRepository>();
+                this.UnitOfWork.Setup(u => u.GetCompanyRepository()).Returns(companyRepository.Object);
 
-        //        };
-
-        //        await service.Create(company);
-
-        //        Assert.Fail();
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        Assert.AreEqual("Company was already registered!", ex.Message);
-
-        //    }
+                companyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>()))
+                       .Returns(true);
 
 
-        //}
+                var service = new CompanyController(this.UnitOfWork.Object, this._userService.Object);
+
+                var company = new CompanyRequest()
+                {
+                    UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
+                    Name = "Empresa Tester",
+                    CNPJ = "36.160.011/0001-86",
+
+                };
+
+                var result = await service.CreateCompany(company);
+
+                Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
+                var badRequestResult = (BadRequestObjectResult)result;
+                Assert.AreEqual(400, badRequestResult.StatusCode);
+
+            }
+            catch (Exception ex)
+            {
+
+                Assert.AreEqual("Company was already registered!", ex.Message);
+
+            }
+
+
+        }
+
+
+
 
 
 
@@ -139,9 +164,15 @@ namespace TestProject1
         //    {
 
 
-        //        await PrepareDatabase();
+        //        this._userService = new Mock<IUserService>();
+        //        this.UnitOfWork = new Mock<IUnitOfWork>();
+        //        var companyRepository = new Mock<ICompanyRepository>();
+        //        this.UnitOfWork.Setup(u => u.GetCompanyRepository()).Returns(companyRepository.Object);
 
-        //        var service = new CompanyRepository(this.context);
+        //        companyRepository.Setup(x => x.IsCompanyAlreadyRegistered(It.IsAny<CompanyRequest>()))
+        //               .Returns(true);
+
+        //        var service = new CompanyController(this.UnitOfWork.Object, this._userService.Object);
 
         //        await service.Delete(Guid.Parse("d203f193-3268-4f38-9901-7059f82ab9fe"));
 
