@@ -21,13 +21,11 @@ namespace ProjectManagement.Services
         public async Task AddAsync(TEntity entity)
         {
              await  this.context.Set<TEntity>().AddAsync(entity);
-             await  this.context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(TEntity entity)
         {
             this.context.Set<TEntity>().Remove(entity);
-            await this.context.SaveChangesAsync();
         }
 
 
@@ -45,10 +43,7 @@ namespace ProjectManagement.Services
         {
             context.Entry(entity).State = EntityState.Modified;
 
-             context.Set<TEntity>().Update(entity);
-            await context.SaveChangesAsync();
-
-           
+            context.Set<TEntity>().Update(entity);
         }
 
 

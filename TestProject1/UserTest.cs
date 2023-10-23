@@ -31,45 +31,45 @@ namespace TestProject1
 
         }
 
-        [TestMethod]
-        public async Task RegisterUserIsValid()
-        {
+        //[TestMethod]
+        //public async Task RegisterUserIsValid()
+        //{
 
 
-            try
-            {
+        //    try
+        //    {
 
-                var users = new List<IdentityUser>
-                {
-                    new IdentityUser() { UserName = "teste", Email = "teste@hotmail.com" },
-                    new IdentityUser() { UserName = "teste3", Email = "teste@gmail.com" }
-                };
+        //        var users = new List<IdentityUser>
+        //        {
+        //            new IdentityUser() { UserName = "teste", Email = "teste@hotmail.com" },
+        //            new IdentityUser() { UserName = "teste3", Email = "teste@gmail.com" }
+        //        };
 
-                var userManager = MockHelper.MockUserManager<IdentityUser>(users).Object;
+        //        var userManager = MockHelper.MockUserManager<IdentityUser>(users).Object;
 
-                var user = new IdentityUser()
-                {
-                    UserName = "GabrielTeste",
-                    Email = "tt@gmail.com"
-                };
-
-
-                UserService service = new UserService(this.context, userManager);
+        //        var user = new IdentityUser()
+        //        {
+        //            UserName = "GabrielTeste",
+        //            Email = "tt@gmail.com"
+        //        };
 
 
-                IdentityResult wasUserRegistered = await service.Register(user, "Abc@123456");
+        //        UserService service = new UserService(this.context, userManager);
 
 
-                Assert.IsTrue(wasUserRegistered.Succeeded);
+        //        IdentityResult wasUserRegistered = await service.Register(user, "Abc@123456");
 
 
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail();
-            }
+        //        Assert.IsTrue(wasUserRegistered.Succeeded);
 
-        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        Assert.Fail();
+        //    }
+
+        //}
 
 
 

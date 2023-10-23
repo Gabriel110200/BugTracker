@@ -1,4 +1,5 @@
 ﻿using ProjectManagement.Models;
+using ProjectManagement.Models.Request;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,9 +11,9 @@ namespace ProjectManagement.IServices
         // Task<List<Company>> ListAllCompanies();
 
 
-         Task<List<Company>> GetOwnedUserCompanies(string id);
+        Task<List<Company>> GetOwnedUserCompanies(string id);
 
-        bool IsCompanyAlreadyRegistered(Company company);
+        bool IsCompanyAlreadyRegistered(CompanyRequest company);
 
         // Task<bool> RegisterAdmins(Guid CompanyId, User User);
 

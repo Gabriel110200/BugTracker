@@ -10,5 +10,11 @@ namespace ProjectManagement.IServices
   
         public  Task Commit();
 
+        IRepositoryBase<T> GetGenericRepository<T>() where T : class;
+
+        public ICompanyRepository GetCompanyRepository();
+
+        public IProjectRepository GetProjectRepository();
+
     }
 }

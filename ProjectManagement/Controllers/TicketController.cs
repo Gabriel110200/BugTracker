@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using ProjectManagement.Models;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ProjectManagement.Controllers
@@ -14,14 +15,14 @@ namespace ProjectManagement.Controllers
     [ApiController]
     public class TicketController : ControllerBase
     {
-
-       // private IProjectService _project;
         private ITicketService _ticket;
-        private readonly ApplicationDbContext _context;
+        //private TicketRepository ticketRepository;
+        private IUnitOfWork UnitOfWork;
 
-        public TicketController(string nome, ITicketService ticket)
+        public TicketController(ITicketService ticket, IUnitOfWork unitOfWork)
         {
             _ticket = ticket;
+            UnitOfWork = unitOfWork;
         }
 
         public static object CriaInstancia(string nome)
@@ -33,12 +34,10 @@ namespace ProjectManagement.Controllers
             {
                 throw new Exception("Tipo de ticket não encontrado");
             }
-                return Activator.CreateInstance(type);
+            return Activator.CreateInstance(type);
         }
 
-     
 
-        // POST api/<TicketController>
         [HttpPost]
         public void Create([FromQuery] string ticketType, Ticket ticket)
         {
@@ -47,6 +46,16 @@ namespace ProjectManagement.Controllers
             ticketService.Create(ticket);
 
         }
+
+
+        [HttpGet("GetTickets/{projectId}")]
+
+        public async Task<IActionResult> GetTickets()
+        {
+
+            return Ok();
+        }
+
 
         [HttpGet]
         public double teste(Project project,string ticketType)
@@ -57,10 +66,7 @@ namespace ProjectManagement.Controllers
 
             return mean;
 
-           
-
         }
-
 
     }
 }

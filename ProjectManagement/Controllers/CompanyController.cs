@@ -1,62 +1,67 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ProjectManagement.Data;
 using ProjectManagement.Helper;
 using ProjectManagement.IServices;
 using ProjectManagement.Models;
+using ProjectManagement.Models.Request;
 using ProjectManagement.Services;
-using System;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 
 namespace ProjectManagement.Controllers
 {
-
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class CompanyController : Controller
+    public class CompanyController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly IUnitOfWork unitofWork;
+        private readonly ICompanyRepository companyRepository;
+        private IUserService userService;
 
-        private ICompanyRepository companyRepository;
-        private IUserService _userService;
-        private readonly ApplicationDbContext _context;
-
-        public CompanyController(ICompanyRepository CompanyRepository, IUserService userService)
+        public CompanyController(IUnitOfWork unitofWork, IUserService userService)
         {
-            companyRepository = CompanyRepository;
-            _userService = userService;
+            this.unitofWork = unitofWork;
+            this.userService = userService;
+            this.companyRepository = this.unitofWork.GetCompanyRepository();
         }
 
 
 
 
         [HttpPost("[Action]")]
-
-        public async Task<IActionResult> CreateCompany(Company company)
+        public async Task<IActionResult> CreateCompany([FromBody] CompanyRequest request)
         {
+            if (this.companyRepository.IsCompanyAlreadyRegistered(request))
+            {
+                return BadRequest("Company was already registered!");
+            }
 
-            validateNewCompany(company);
-            await companyRepository.AddAsync(company);
-            var CompanyCreated = await companyRepository.GetByIdAsync(company.Id);
-            return Created(string.Empty,CompanyCreated);
+            if (!Helpers.ValidateCnpj(request.CNPJ))
+            {
+                return BadRequest("CNPJ is invalid!");
+            }
 
+            var company = new Company()
+            {
+                Name = request.Name, 
+                Description = request.Description, 
+                CNPJ = request.CNPJ, 
+                CorporateName= request.CorporateName,
+                Image = request.Image,
+                UserId = request.UserId
+                
+            };
+
+            await this.companyRepository.AddAsync(company);
+            await this.unitofWork.Commit();
+
+            return Created("Empresa criada com sucesso",company);
         }
 
-
-        private void validateNewCompany(Company company)
-        {
-            if (companyRepository.IsCompanyAlreadyRegistered(company))
-                throw new ValidationException("Company was already registered!");
-
-            if (!Helpers.ValidateCnpj(company.CNPJ))
-                throw new ValidationException("CNPJ is invalid!");
-        }
-
-        
 
 
         [HttpGet("[Action]/{userId}")]
@@ -64,8 +69,7 @@ namespace ProjectManagement.Controllers
         public async Task<IActionResult> GetUserCompanies(string userId)
         {
 
-
-            var doesUserExist = await _userService.Get(userId);
+            var doesUserExist = await this.userService.Get(userId);
 
             if (doesUserExist is null)
                 throw new ValidationException("The specified user does not exist in our system");
@@ -78,14 +82,6 @@ namespace ProjectManagement.Controllers
             return Ok(companies);
 
         }
-
-
-        
-
-
-
-
-
 
 
     }

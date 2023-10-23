@@ -4,6 +4,7 @@ using ProjectManagement.Controllers;
 using ProjectManagement.Data;
 using ProjectManagement.IServices;
 using ProjectManagement.Models;
+using ProjectManagement.Models.Request;
 using ProjectManagement.Services;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,7 @@ namespace TestProject1
 
         private Mock<ICompanyRepository> companyRepository;
         private Mock<IUserService> _userService;
+        private Mock<IUnitOfWork> UnitOfWork; 
 
 
 
@@ -31,8 +33,8 @@ namespace TestProject1
         {
             Connect connect = new Connect();
 
-            this.context = connect.CriarContextInMemory();
-            this.context.Database.EnsureDeleted();
+           // this.context = connect.CriarContextInMemory();
+           // this.context.Database.EnsureDeleted();
         }
 
 
@@ -41,15 +43,16 @@ namespace TestProject1
         public async Task CreateCompanyIsValid()
         {
 
-            //Arrange
-
-            this.companyRepository = new Mock<ICompanyRepository>();
             this._userService = new Mock<IUserService>();
+            this.UnitOfWork = new Mock<IUnitOfWork>(); 
 
-            var service = new CompanyController(this.companyRepository.Object, this._userService.Object);
 
 
-            Company company = new Company()
+
+            var service = new CompanyController(this.UnitOfWork.Object, this._userService.Object);
+
+
+            CompanyRequest company = new CompanyRequest()
             {
                 UserId = "59cc8c06-319a-424f-843d-aa66deed3c00",
                 Name = "Empresa Teste",
@@ -57,13 +60,13 @@ namespace TestProject1
 
             };
 
-            //act
+            Company comp = new Company();
+
 
             await service.CreateCompany(company);
 
-            //assert 
 
-            this.companyRepository.Verify(x => x.AddAsync(company), Times.Once);
+            this.companyRepository.Verify(x => x.AddAsync(comp), Times.Once);
 
         }
 
@@ -72,12 +75,12 @@ namespace TestProject1
         public async Task CreateCompanyCNPJ_IsInvalid()
         {
 
-            this.companyRepository = new Mock<ICompanyRepository>();
+            this.UnitOfWork = new Mock<IUnitOfWork>();
             this._userService = new Mock<IUserService>();
 
-            var service = new CompanyController(this.companyRepository.Object, this._userService.Object);
+            var service = new CompanyController(this.UnitOfWork.Object, this._userService.Object);
 
-            Company company = new Company()
+            CompanyRequest company = new CompanyRequest()
             {
                 Name = "Empresa Teste",
                 CNPJ = "111111111"

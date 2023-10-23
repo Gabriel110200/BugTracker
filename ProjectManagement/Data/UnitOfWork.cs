@@ -38,34 +38,30 @@ namespace ProjectManagement.Data
         }
 
 
-        public ICompanyRepository CompanyRepository
+
+        public IProjectRepository GetProjectRepository()
         {
-            get
+           
+                if (this._projectRepository== null)
+                {
+                    this._projectRepository = new ProjectRepository(_context);
+                }
+
+              return this._projectRepository;
+            
+        }
+
+        public ICompanyRepository GetCompanyRepository()
+        {
+            if (this._companyRepository == null)
             {
-                if (_companyRepository == null)
-                {
-                    _companyRepository = new CompanyRepository(_context);
-                }
-
-                return _companyRepository;
+                this._companyRepository = new CompanyRepository(_context);
             }
+
+            return this._companyRepository;
         }
 
 
-        public IProjectRepository ProjectRepository
-        {
-            get
-            { 
-                if(_projectRepository == null)
-                {
-                    _projectRepository = new ProjectRepository(_context);
-                }
-
-                return _projectRepository;
-            }
-
-        
-        }
 
     }
 }

@@ -4,6 +4,7 @@ using ProjectManagement.Data;
 using ProjectManagement.Data.Migrations;
 using ProjectManagement.IServices;
 using ProjectManagement.Models;
+using ProjectManagement.Models.Request;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -15,23 +16,35 @@ namespace ProjectManagement.Controllers
 {
     public class ProjectController : Controller
     {
-        private IProjectRepository _projectRepository;
-   
 
+        public IUnitOfWork UnitOfWork { get; }
+        public IProjectRepository ProjectRepository { get; }
 
-        public ProjectController(IProjectRepository ProjectRepository)
+        public ProjectController(IUnitOfWork unitOfWork)
         {
-            _projectRepository = ProjectRepository;
-            
-
+            UnitOfWork = unitOfWork;
+            this.ProjectRepository = this.UnitOfWork.GetProjectRepository();
         }
 
         [HttpPost("/[Controller]/[Action]")]
 
-        public async Task<IActionResult> CreateProject([FromBody] Project project)
+        public async Task<IActionResult> CreateProject([FromBody] ProjectRequest request)
         {
-            await _projectRepository.AddAsync(project);
-            var CreatedProject = await _projectRepository.GetByIdAsync(project.Id);
+
+            var project = new Project()
+            {
+                CompanyId_FK = request.CompanyID,
+                Name = request.ProjectName,
+                Description = request.Description,
+                Status = Enum.ProjectStatus.Development,
+                IsActive = true,
+            }; 
+
+
+
+            await this.ProjectRepository.AddAsync(project);
+            await this.UnitOfWork.Commit();
+            var CreatedProject = await this.ProjectRepository.GetByIdAsync(project.Id);
             return Created(string.Empty,CreatedProject);
 
         }
@@ -42,7 +55,7 @@ namespace ProjectManagement.Controllers
         public async Task<IActionResult> UpdateProject([FromBody]  Project project)
         {
 
-            await _projectRepository.UpdateAsync(project);
+            await this.ProjectRepository.UpdateAsync(project);
             return Ok();
 
 
@@ -51,24 +64,33 @@ namespace ProjectManagement.Controllers
 
 
         [HttpGet("/[Controller]/[Action]")]
-        public async Task<List<Project>> Read(Guid CompanyId)
+        public async Task<IActionResult> ListProjects(Guid CompanyId)
         {
-            // var projects = await _projectRepository.ListAllProjects(CompanyId);
-            //  return projects;
+             var projects = await this.ProjectRepository.GetAsync();
+             return Ok(projects);
 
-            throw new NotImplementedException();
 
         }
 
 
 
 
-        [HttpGet("/[Controller]/Action")]
+        [HttpGet("/[Controller]/[Action]")]
 
-        public  IActionResult Delete(Guid projectId)
+        public async  Task<IActionResult> Delete(Guid projectId)
         {
-            //var isProjectDeleted =  _projectRepository.DeleteAsync(projectId);
-            return NoContent();
+
+            var project =await this.ProjectRepository.GetByIdAsync(projectId);
+
+            if(project == null)
+            {
+                return BadRequest("Projeto não encontrado");
+            }
+
+            await this.ProjectRepository.DeleteAsync(project);
+            await this.UnitOfWork.Commit();
+
+            return Ok("Projeto deletado com sucesso");
 
         }
 
