@@ -28,8 +28,6 @@ namespace ProjectManagement.Models
 
         Project Project { get; set; }
 
-
-
-
+   
     }
 }

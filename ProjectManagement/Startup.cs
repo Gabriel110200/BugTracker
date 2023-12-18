@@ -41,7 +41,16 @@ namespace ProjectManagement
             options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
 
-          
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder
+                        .WithOrigins("http://localhost:4200") 
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials());
+            });
 
             services.AddDefaultIdentity<IdentityUser>(
                 options => options.SignIn.RequireConfirmedAccount = true
@@ -135,7 +144,7 @@ namespace ProjectManagement
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseCors("AllowSpecificOrigin");
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -148,6 +157,7 @@ namespace ProjectManagement
             app.ConfigureCustomExceptionMiddleware();
 
             app.UseRouting();
+            app.UseCors("AllowAny");
 
             app.UseAuthentication();
             app.UseAuthorization();

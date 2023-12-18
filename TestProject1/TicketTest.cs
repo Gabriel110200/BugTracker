@@ -1,93 +1,62 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProjectManagement.Data;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using ProjectManagement.Controllers;
+using ProjectManagement.IServices;
 using ProjectManagement.Models;
-using ProjectManagement.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace TestProject1
+[TestClass]
+public class TicketControllerTests
 {
-    [TestClass]
-    public class TicketTest
+    [TestMethod]
+    public void Create_ValidTicketType_CallsTicketServiceCreate()
     {
-        private ApplicationDbContext context;
-        public TicketTest()
-        {
-            Connect connect = new Connect();
-            this.context = connect.CriarContextInMemory();
+        // Arrange
+        var ticketServiceMock = new Mock<ITicketService>();
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        var controller = new TicketController(ticketServiceMock.Object, unitOfWorkMock.Object);
 
-        }
+        var ticketType = "SomeTicketType";
+        var ticket = new Ticket();
 
+        // Act
+        controller.Create(ticketType, ticket);
 
-        [TestMethod]
+        // Assert
+        ticketServiceMock.Verify(ts => ts.Create(ticket), Times.Once);
+    }
 
-        public async Task CreateTicketIsValid()
-        {
+    [TestMethod]
+    public async Task GetTickets_ReturnsOkResult()
+    {
+        // Arrange
+        var ticketServiceMock = new Mock<ITicketService>();
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        var controller = new TicketController(ticketServiceMock.Object, unitOfWorkMock.Object);
 
-            try
-            {
+        // Act
+        var result = await controller.GetTickets();
 
+        // Assert
+        Assert.IsInstanceOfType(result, typeof(OkResult));
+    }
 
-                var ticket = new Ticket()
-                {
-                    Id = Guid.Parse("9e062489-1d92-4874-a6db-2cdfbbecdc5e"),
-                    Title = "bugTeste",
-                    Priority = ProjectManagement.Enum.TicketPriority.Low
-                };
+    [TestMethod]
+    public void Teste_ValidTicketType_CallsTicketServiceUrgentPriorityArithmeticMean()
+    {
+        // Arrange
+        var ticketServiceMock = new Mock<ITicketService>();
+        var unitOfWorkMock = new Mock<IUnitOfWork>();
+        var controller = new TicketController(ticketServiceMock.Object, unitOfWorkMock.Object);
 
-                var service = new TicketService(this.context);
+        var project = new Project();
+        var ticketType = "SomeTicketType";
 
-                await service.Create(ticket);
+        // Act
+        var result = controller.teste(project, ticketType);
 
-                var wasTicketRegistered = this.context.Tickets.Any(x => x.Id == Guid.Parse("9e062489-1d92-4874-a6db-2cdfbbecdc5e"));
-
-                Assert.IsTrue(wasTicketRegistered);
-
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail(ex.Message);
-            }
-
-
-
-        }
-
-
-        //[TestMethod]
-        //public  void  testTicketDelete()
-        //{
-        //    //PrepareDatabase();
-        //    TicketService service = new TicketService(this.context);
-
-        //     service.Delete(Guid.Parse("idTest"));
-
-        //    var wasTicketDeleted = this.context.Tickets.Any(x => x.Id == Guid.Parse("idTest"));
-
-        //    Assert.IsTrue(wasTicketDeleted);
-
-        //}
-
-
-        //public void PrepareDatabase()
-        //{
-        //    Ticket ticket =  new Ticket()
-        //    {
-        //        Id = Guid.Parse("idTest"),
-        //        Title = "Ticket Teste",
-
-        //    };
-
-        //    this.context.Tickets.Add(ticket);
-        //    this.context.SaveChangesAsync();
-
-        //}
-
-
-
-
+        // Assert
+        ticketServiceMock.Verify(ts => ts.UrgentPriorityArithmeticMean(project), Times.Once);
     }
 }

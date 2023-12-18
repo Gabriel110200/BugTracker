@@ -1,77 +1,62 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProjectManagement.Data;
-using ProjectManagement.Models;
-using ProjectManagement.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using ProjectManagement.Controllers;
+using ProjectManagement.IServices;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
+using ProjectManagement.Models.Request;
+using ProjectManagement.Models;
 
-namespace TestProject1
+namespace ProjectManagement.Tests
 {
     [TestClass]
-
-    public class UserTest
+    public class UserControllerTests
     {
-
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
-        public ApplicationDbContext context;
-
-
-        public UserTest()
+        [TestMethod]
+        public async Task RegisterUser_ValidUserRequest_ReturnsCreatedResult()
         {
+            var userServiceMock = new Mock<IUserService>();
+            userServiceMock.Setup(u => u.Register(It.IsAny<IdentityUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
+            var controller = new UserController(userServiceMock.Object);
+            var request = new UserRequest
+            {
+                UserName = "TestUser",
+                Mail = "test@example.com",
+                Password = "Password123",
+            };
 
-            Connect connect = new Connect();
 
-            this.context = connect.CriarContextInMemory();
+            var result = await controller.RegisterUser(request) as CreatedResult;
 
 
+            Assert.IsNotNull(result);
+            Assert.AreEqual(201, result.StatusCode);
         }
 
-        //[TestMethod]
-        //public async Task RegisterUserIsValid()
-        //{
+        [TestMethod]
+        public async Task Login_ValidLoginRequest_ReturnsOkResultWithJwtToken()
+        {
+
+            var userServiceMock = new Mock<IUserService>();
+            userServiceMock.Setup(u => u.SignIn(It.IsAny<LoginRequest>())).ReturnsAsync(Microsoft.AspNetCore.Identity.SignInResult.Success);
+            var controller = new UserController(userServiceMock.Object);
+            var request = new LoginRequest
+            {
+                Mail = "test@example.com",
+                Password = "Password123",
+            };
 
 
-        //    try
-        //    {
-
-        //        var users = new List<IdentityUser>
-        //        {
-        //            new IdentityUser() { UserName = "teste", Email = "teste@hotmail.com" },
-        //            new IdentityUser() { UserName = "teste3", Email = "teste@gmail.com" }
-        //        };
-
-        //        var userManager = MockHelper.MockUserManager<IdentityUser>(users).Object;
-
-        //        var user = new IdentityUser()
-        //        {
-        //            UserName = "GabrielTeste",
-        //            Email = "tt@gmail.com"
-        //        };
+            var result = await controller.Login(request) as OkObjectResult;
 
 
-        //        UserService service = new UserService(this.context, userManager);
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
 
-
-        //        IdentityResult wasUserRegistered = await service.Register(user, "Abc@123456");
-
-
-        //        Assert.IsTrue(wasUserRegistered.Succeeded);
-
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Assert.Fail();
-        //    }
-
-        //}
-
-
+        }
 
 
     }

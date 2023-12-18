@@ -1,201 +1,112 @@
-//using Microsoft.EntityFrameworkCore;
-//using Microsoft.VisualStudio.TestTools.UnitTesting;
-//using Moq;
-//using ProjectManagement.Controllers;
-//using ProjectManagement.Data;
-//using ProjectManagement.Data.Migrations;
-//using ProjectManagement.IServices;
-//using ProjectManagement.Models;
-//using ProjectManagement.Services;
-//using System;
-//using System.Collections.Generic;
-//using System.Security.Cryptography.X509Certificates;
-//using System.Threading;
-//using System.Threading.Tasks;
-
-//namespace TestProject1
-//{
-//    [TestClass]
-//    public class ProjectTest
-//    {
-
-//        private readonly Mock<IProjectService> proj;
-//        private ApplicationDbContext context;
-
-        
-//        public ProjectTest()
-//        {
-
-           
-//            //this.config = new Mock<IConfiguration>();
-
-//            this.context = null;
-
-//            this.proj = new Mock<IProjectService>();
-//            Connect connect = new Connect();
-
-//            this.context = connect.CriarContextInMemory();
-//            this.context.Database.EnsureDeleted();
-
-
-
-//        }
-
-
-
-//        //[TestMethod]
-//        //public async Task ProjectControllerIsValid()
-//        //{
-
-//        //    try 
-//        //    {
-
-
-//        //    var service = new ProjectServices(this.context);
-
-//        //    Project project = new Project()
-//        //    {
-//        //            Name = "Projeto teste",
-//        //    };
-
-//        //    service.Create(project, Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
-
-
-//        //    return;
-
-//        //    }
-//        //    catch(Exception ex)
-//        //    {
-//        //        Assert.Fail(ex.Message);
-//        //    }
-
-//        //}
-
-
-//        [TestMethod]
-//        public async Task CreateProjectIsValid()
-//        {
-
-//            try
-//            {
-
-
-//                var service = new ProjectRepository(this.context);
-
-//                Project project = new Project()
-//                {
-//                    Name = "Projeto teste",
-//                };
-
-//                await service.Create(project);
-
-//                return;
-
-//            }
-//            catch (Exception ex)
-//            {
-//                Assert.Fail();
-//            }
-
-
-//        }
-
-
-//        [TestMethod]
-//        public async Task ListAllProjects()
-//        {
-
-//            try
-//            {
-
-
-//                PrepararDatabase();
-
-//                var service = new ProjectRepository(this.context);
-//                var projects = await service.ListAllProjects(Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"));
-//                Assert.IsInstanceOfType(projects, typeof(List<Project>));
-
-
-
-//            }
-//            catch (Exception ex)
-//            {
-//                Assert.Fail();
-//            }
-
-
-
-//        }
-
-
-//        [TestMethod]
-//        public async Task DeleteProjectNotFoundException()
-//        {
-
-//            try
-//            {
-
-//                ProjectRepository service = new ProjectRepository(this.context);
-//                service.Delete(Guid.Parse("a3485d47-f1a9-4b40-ba15-acd9f251c4dd"));
-
-
-//            }catch(Exception ex)
-//            {
-//                Assert.AreEqual("Project not found", ex.Message);
-//            }
-
-//        }
-
-
-        
-
-
-//        [TestMethod]
-
-//        public async Task DeleteProjectSuccessful()
-//        {
-//            try
-//            {
-
-//                PrepararDatabase();
-//                ProjectRepository service = new ProjectRepository(this.context);
-//                var wasProjectDeleted = service.Delete(Guid.Parse("0b93cf51-4927-4097-bf76-9e1fc165ea24"));
-//                Assert.IsTrue(wasProjectDeleted);
-
-//            }
-//            catch (Exception ex)
-//            {
-//                Assert.Fail();
-//            }
-//        }
-
-
-//        public void PrepararDatabase()
-//        {
-
-
-//            Project project = new Project()
-//            {
-//                Id = Guid.Parse("0b93cf51-4927-4097-bf76-9e1fc165ea24"),
-//                Name = "Projeto repetido",
-//                CompanyId_FK = Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c")
-
-//            };
-
-//            Company companny = new Company()
-//            {
-//                Id = Guid.Parse("d4e0dc03-f766-470b-9594-78a756032d1c"),
-//                Name = "Empresa teste"
-//            };
-
-            
-
-//            this.context.Projects.Add(project);
-//            this.context.Companies.Add(companny);
-//            this.context.SaveChanges();
-
-
-//        }
-
-//    }
-//}
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using ProjectManagement.Controllers;
+using ProjectManagement.IServices;
+using ProjectManagement.Models;
+using ProjectManagement.Models.Request;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ProjectManagement.Tests
+{
+    [TestClass]
+    public class ProjectControllerTests
+    {
+        [TestMethod]
+        public async Task CreateProject_ValidRequest_ReturnsCreatedResult()
+        {
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var projectRepositoryMock = new Mock<IProjectRepository>();
+            unitOfWorkMock.Setup(u => u.GetProjectRepository()).Returns(projectRepositoryMock.Object);
+            var controller = new ProjectController(unitOfWorkMock.Object);
+            var request = new ProjectRequest
+            {
+                CompanyID = Guid.NewGuid(),
+                ProjectName = "Test Project",
+                Description = "Test Description",
+            };
+
+            var result = await controller.CreateProject(request) as CreatedResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(201, result.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task UpdateProject_ValidProject_ReturnsOkResult()
+        {
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var projectRepositoryMock = new Mock<IProjectRepository>();
+            unitOfWorkMock.Setup(u => u.GetProjectRepository()).Returns(projectRepositoryMock.Object);
+            var controller = new ProjectController(unitOfWorkMock.Object);
+            var project = new Project
+            {
+                Id = Guid.NewGuid(),
+            };
+
+            var result = await controller.UpdateProject(project) as OkResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task ListProjects_ReturnsListOfProjects()
+        {
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var projectRepositoryMock = new Mock<IProjectRepository>();
+            unitOfWorkMock.Setup(u => u.GetProjectRepository()).Returns(projectRepositoryMock.Object);
+            var controller = new ProjectController(unitOfWorkMock.Object);
+            var projects = new List<Project>
+            {
+                new Project { Id = Guid.NewGuid(), /* Set other properties */ },
+                new Project { Id = Guid.NewGuid(), /* Set other properties */ },
+            };
+            projectRepositoryMock.Setup(r => r.GetAsync(null)).ReturnsAsync(projects);
+
+            var result = await controller.ListProjects(Guid.NewGuid()) as OkObjectResult;
+            var projectList = result.Value as List<Project>;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+            Assert.IsNotNull(projectList);
+            Assert.AreEqual(2, projectList.Count); // Adjust this based on your sample data
+        }
+
+        [TestMethod]
+        public async Task Delete_ExistingProject_ReturnsOkResult()
+        {
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var projectRepositoryMock = new Mock<IProjectRepository>();
+            unitOfWorkMock.Setup(u => u.GetProjectRepository()).Returns(projectRepositoryMock.Object);
+            var controller = new ProjectController(unitOfWorkMock.Object);
+            var projectId = Guid.NewGuid();
+            var existingProject = new Project { Id = projectId, /* Set other properties */ };
+            projectRepositoryMock.Setup(r => r.GetByIdAsync(projectId)).ReturnsAsync(existingProject);
+
+            var result = await controller.Delete(projectId) as OkObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(200, result.StatusCode);
+        }
+
+        [TestMethod]
+        public async Task Delete_NonExistentProject_ReturnsBadRequest()
+        {
+            var unitOfWorkMock = new Mock<IUnitOfWork>();
+            var projectRepositoryMock = new Mock<IProjectRepository>();
+            unitOfWorkMock.Setup(u => u.GetProjectRepository()).Returns(projectRepositoryMock.Object);
+            var controller = new ProjectController(unitOfWorkMock.Object);
+            var projectId = Guid.NewGuid();
+            projectRepositoryMock.Setup(r => r.GetByIdAsync(projectId)).ReturnsAsync((Project)null);
+
+            var result = await controller.Delete(projectId) as BadRequestObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(400, result.StatusCode);
+            Assert.AreEqual("Projeto não encontrado", result.Value);
+        }
+    }
+}
