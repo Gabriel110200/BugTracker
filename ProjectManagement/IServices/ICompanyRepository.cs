@@ -11,7 +11,7 @@ namespace ProjectManagement.IServices
         // Task<List<Company>> ListAllCompanies();
 
 
-        Task<List<Company>> GetOwnedUserCompanies(string id);
+        Task<Company> GetOwnedUserCompanies(string id);
 
         bool IsCompanyAlreadyRegistered(CompanyRequest company);
 

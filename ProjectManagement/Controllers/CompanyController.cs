@@ -35,6 +35,7 @@ namespace ProjectManagement.Controllers
         [HttpPost("[Action]")]
         public async Task<IActionResult> CreateCompany([FromBody] CompanyRequest request)
         {
+
             if (this.companyRepository.IsCompanyAlreadyRegistered(request))
             {
                 return BadRequest("Company was already registered!");

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +41,9 @@ namespace ProjectManagement
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            TestDatabaseConnection(Configuration.GetConnectionString("DefaultConnection"));
+
 
 
             services.AddCors(options =>
@@ -126,6 +130,24 @@ namespace ProjectManagement
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IUserService, UserService>();
 
+        }
+
+        private void TestDatabaseConnection(string v)
+        {
+
+                try
+                {
+                    using (var connection = new SqlConnection(v))
+                    {
+                        connection.Open();
+                        Console.WriteLine("Database connection successful.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Database connection failed: {ex.Message}");
+                }
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

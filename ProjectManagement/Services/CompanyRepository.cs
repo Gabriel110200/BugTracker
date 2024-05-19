@@ -18,9 +18,9 @@ namespace ProjectManagement.Services
             this.context = context;
         }
 
-        public async Task<List<Company>> GetOwnedUserCompanies(string id)
+        public async Task<Company> GetOwnedUserCompanies(string id)
         {
-            return  await context.Companies.Where(x => x.UserId == id).ToListAsync();
+            return  await context.Companies.Where(x => x.UserId == id).FirstOrDefaultAsync();
         }
 
         public bool IsCompanyAlreadyRegistered(CompanyRequest company)
