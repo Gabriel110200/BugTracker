@@ -1,4 +1,5 @@
-﻿using ProjectManagement.IServices;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using ProjectManagement.IServices;
 using ProjectManagement.Services;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace ProjectManagement.Data
         public async Task Commit()
         {
             await this._context.SaveChangesAsync();
+        }
+
+        public async Task<IDbContextTransaction> BeginTransaction()
+        {
+            return await this._context.Database.BeginTransactionAsync();
         }
 
 

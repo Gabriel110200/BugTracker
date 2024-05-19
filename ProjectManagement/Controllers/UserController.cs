@@ -11,6 +11,7 @@ using System.Text;
 using System;
 using System.Threading.Tasks;
 using ProjectManagement.Models.Request;
+using ProjectManagement.Helper;
 
 namespace ProjectManagement.Controllers
 {
@@ -18,35 +19,94 @@ namespace ProjectManagement.Controllers
     [ApiController]
     public class UserController : Controller
     {
+        private readonly ICompanyRepository companyRepository;
         private readonly ApplicationDbContext _context;
+        private readonly IUnitOfWork unitOfWork;
         private IUserService UserService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, ICompanyRepository companyRepository, IUnitOfWork unitOfWork)
         {
             UserService = userService;
+            this.companyRepository = companyRepository;
+            this.unitOfWork = unitOfWork;
         }
 
 
         [HttpPost("[Action]")]
         public async Task<IActionResult> RegisterUser(UserRequest request)
         {
-
-            var iUser = new IdentityUser
+            try
             {
-                UserName = request.UserName,
-                Email = request.Mail,
-            };
 
+                return Ok();
 
-            var wasUserRegistered = await this.UserService.Register(iUser, request.Password);
+                //using (var transaction = await this.unitOfWork.BeginTransaction())
+                //{
 
-            if (wasUserRegistered.Succeeded)
-                return Created("~/api/CreateUser", new { User = iUser });
+                //    var iUser = new IdentityUser
+                //    {
+                //        UserName = request.UserName,
+                //        Email = request.Mail,
+                //    };
 
-            return BadRequest(wasUserRegistered);
+                //    var wasUserRegistered = await this.UserService.Register(iUser, request.Password);
 
+                //    if (wasUserRegistered.Succeeded)
+                //    {
+
+                //        var company = new CompanyRequest()
+                //        {
+                //            CNPJ = request.CNPJ,
+                //            Name = request.CompanyName,
+                //            UserId = iUser.Id
+                //        };
+
+                //        await this.CreateCompany(company);
+
+                //        await this.unitOfWork.Commit();
+                //        return Created("~/api/CreateUser", new { User = iUser });
+                //    }
+
+                //    return BadRequest(wasUserRegistered);
+
+                //}
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
         }
+
+        public async Task CreateCompany([FromBody] CompanyRequest request)
+        {
+            if (this.companyRepository.IsCompanyAlreadyRegistered(request))
+            {
+
+                throw new Exception("Empresa já registrada");
+
+            }
+
+            if (!Helpers.ValidateCnpj(request.CNPJ))
+            {
+                throw new Exception("CNPJ inválido");
+            }
+
+            var company = new Company()
+            {
+                Name = request.Name,
+                Description = request.Description,
+                CNPJ = request.CNPJ,
+                CorporateName = request.CorporateName,
+                Image = request.Image,
+                UserId = request.UserId
+
+            };
+
+            await this.companyRepository.AddAsync(company);
+
+        }
+
 
 
         [HttpPost("[Action]")]
@@ -65,7 +125,8 @@ namespace ProjectManagement.Controllers
                     Jwt = jwtToken
                 });
 
-            }else
+            }
+            else
             {
                 return BadRequest("Usuário não encontrado");
             }
@@ -91,7 +152,6 @@ namespace ProjectManagement.Controllers
             var tokenHandler = new JwtSecurityTokenHandler();
             return tokenHandler.WriteToken(token);
         }
-
 
 
     }

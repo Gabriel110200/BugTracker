@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace ProjectManagement.IServices
         public ICompanyRepository GetCompanyRepository();
 
         public IProjectRepository GetProjectRepository();
+
+         Task<IDbContextTransaction> BeginTransaction();
 
     }
 }
