@@ -31,12 +31,12 @@ namespace ProjectManagement.Services
         public Task<IdentityUser> Get(string id)
         {
 
-            return  this._context.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
+            return this._context.Users.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<IdentityResult> Register(IdentityUser user, string password)
         {
-          
+
 
             try
             {
@@ -57,26 +57,30 @@ namespace ProjectManagement.Services
 
         }
 
-        public async Task<SignInResult> SignIn(LoginRequest request)
+        public async Task<SignInResultWithUser> SignIn(LoginRequest request)
         {
-            
             var user = await this._context.Users.Where(x => x.Email == request.Mail).FirstOrDefaultAsync();
 
             if (user != null)
             {
-                
                 var result = await this.SignInManager.CheckPasswordSignInAsync(user, request.Password, true);
 
                 if (result.Succeeded)
                 {
-                    
                     await this.SignInManager.SignInAsync(user, isPersistent: false);
-                    return result;
+                    return new SignInResultWithUser
+                    {
+                        Result = result,
+                        User = user
+                    };
                 }
             }
 
-            return SignInResult.Failed; 
+            return new SignInResultWithUser
+            {
+                Result = SignInResult.Failed,
+                User = null
+            };
         }
-
     }
 }

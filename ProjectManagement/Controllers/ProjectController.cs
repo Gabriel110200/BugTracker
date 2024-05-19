@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Data;
 using ProjectManagement.Data.Migrations;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.Controllers
 {
+    [Authorize]
     public class ProjectController : Controller
     {
 

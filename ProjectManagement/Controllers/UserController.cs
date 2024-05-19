@@ -38,7 +38,7 @@ namespace ProjectManagement.Controllers
             try
             {
 
-                using (var transaction = await this.unitOfWork.BeginTransaction())
+                using (var transaction = await this.unitOfWork.BeginTransactionAsync())
                 {
 
                     var iUser = new IdentityUser
@@ -119,8 +119,9 @@ namespace ProjectManagement.Controllers
 
             var jwtToken = this.GenerateJwtToken(request.Mail);
 
-            if (result.Succeeded)
+            if (result.Result.Succeeded)
             {
+
                 return Ok(new
                 {
                     Result = result,

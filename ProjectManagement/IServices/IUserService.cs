@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using ProjectManagement.Models.Request;
+using ProjectManagement.Services;
 using System.Threading.Tasks;
 
 namespace ProjectManagement.IServices
@@ -11,7 +12,7 @@ namespace ProjectManagement.IServices
 
         Task<IdentityUser> Get(string id);
 
-        Task<SignInResult> SignIn(LoginRequest request);
+        Task<SignInResultWithUser> SignIn(LoginRequest request);
 
 
     }

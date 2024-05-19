@@ -1,4 +1,5 @@
-﻿using ProjectManagement.IServices;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using ProjectManagement.IServices;
 using ProjectManagement.Services;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,12 @@ namespace ProjectManagement.Data
         {
             await this._context.SaveChangesAsync();
         }
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _context.Database.BeginTransactionAsync();
+        }
+
 
 
         public IRepositoryBase<T> GetGenericRepository<T>() where T : class
