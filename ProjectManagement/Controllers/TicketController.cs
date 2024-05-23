@@ -7,6 +7,7 @@ using System;
 using ProjectManagement.Models;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using ProjectManagement.Models.Request;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ProjectManagement.Controllers
@@ -39,12 +40,23 @@ namespace ProjectManagement.Controllers
 
 
         [HttpPost]
-        public void Create([FromQuery] string ticketType, Ticket ticket)
+        public void Create([FromQuery] string ticketType, TicketRequest request)
         {
+
+            var ticket = new Ticket()
+            {
+                Title = request.Title,
+                DeadLine = request.DeadLine,
+                Message = request.Message,
+                Priority = request.Priority,
+                Status = request.Status,
+                Type = request.Type,
+                ProjectId_FK = request.ProjectId_FK,
+            };
+
             ITicketService ticketService = (ITicketService)CriaInstancia(ticketType);
 
             ticketService.Create(ticket);
-
         }
 
 

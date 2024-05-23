@@ -15,34 +15,38 @@ using System.Threading.Tasks;
 
 namespace ProjectManagement.Controllers
 {
-    [Authorize]
+    //  [Authorize]
+    [Route("api/[controller]")]
     public class ProjectController : Controller
     {
 
         public IUnitOfWork UnitOfWork { get; }
         public IProjectRepository ProjectRepository { get; }
 
+        public ICompanyRepository CompanyRepository { get; }
+
         public ProjectController(IUnitOfWork unitOfWork)
         {
             UnitOfWork = unitOfWork;
             this.ProjectRepository = this.UnitOfWork.GetProjectRepository();
+            this.CompanyRepository = this.UnitOfWork.GetCompanyRepository();
         }
 
-        [HttpPost("/[Controller]/[Action]")]
+        [HttpPost("[Action]")]
 
         public async Task<IActionResult> CreateProject([FromBody] ProjectRequest request)
         {
 
+            var company = await this.CompanyRepository.GetOwnedUserCompanies(request.UserId.ToString()); 
+
             var project = new Project()
             {
-                CompanyId_FK = request.CompanyID,
+                CompanyId_FK = company.Id,
                 Name = request.ProjectName,
                 Description = request.Description,
                 Status = Enum.ProjectStatus.Development,
                 IsActive = true,
             }; 
-
-
 
             await this.ProjectRepository.AddAsync(project);
             await this.UnitOfWork.Commit();
@@ -52,7 +56,7 @@ namespace ProjectManagement.Controllers
         }
 
 
-        [HttpPost("/[Controller]/[Action]")]
+        [HttpPut("update")]
 
         public async Task<IActionResult> UpdateProject([FromBody]  Project project)
         {
@@ -65,8 +69,8 @@ namespace ProjectManagement.Controllers
 
 
 
-        [HttpGet("/[Controller]/[Action]")]
-        public async Task<IActionResult> ListProjects(Guid CompanyId)
+        [HttpGet("list")]
+        public async Task<IActionResult> ListProjects()
         {
              var projects = await this.ProjectRepository.GetAsync();
              return Ok(projects);
@@ -77,14 +81,14 @@ namespace ProjectManagement.Controllers
 
 
 
-        [HttpGet("/[Controller]/[Action]")]
+        [HttpDelete("{projectId}")]
 
-        public async  Task<IActionResult> Delete(Guid projectId)
+        public async Task<IActionResult> Delete([FromRoute] Guid projectId)
         {
 
-            var project =await this.ProjectRepository.GetByIdAsync(projectId);
+            var project = await this.ProjectRepository.GetByIdAsync(projectId);
 
-            if(project == null)
+            if (project == null)
             {
                 return BadRequest("Projeto não encontrado");
             }
