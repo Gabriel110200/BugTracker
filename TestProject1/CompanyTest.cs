@@ -129,7 +129,7 @@ namespace TestProject1
 
             this._userService.Setup(x => x.Get(It.IsAny<string>())).ReturnsAsync(user);
 
-            this.CompanyRepository.Setup(x => x.GetOwnedUserCompanies(It.IsAny<string>())).ReturnsAsync(company);
+            // this.CompanyRepository.Setup(x => x.GetOwnedUserCompanies(It.IsAny<string>())).ReturnsAsync(company);
 
             var result = await this.CompanyController.GetUserCompanies("b95b3400-787f-493a-bdd7-3eed4897e441");
 

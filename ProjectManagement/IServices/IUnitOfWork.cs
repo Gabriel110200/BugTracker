@@ -17,6 +17,8 @@ namespace ProjectManagement.IServices
 
         public IProjectRepository GetProjectRepository();
 
+        public ITicketRepository GetTicketRepository();
+
         public Task<IDbContextTransaction> BeginTransactionAsync();
     }
 }

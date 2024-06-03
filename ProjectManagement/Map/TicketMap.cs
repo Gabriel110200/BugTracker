@@ -12,12 +12,25 @@ namespace ProjectManagement.Map
 
             builder.Property(x => x.Id).ValueGeneratedOnAdd();
 
+            builder.Property(x => x.File)
+                    .HasColumnType("varchar(255)")
+                    .IsRequired(false);
+
             builder.Property(x => x.Title)
                    .HasColumnType("varchar(20)")
                    .IsRequired();
 
-            builder.Property(x => x.Message)
-                    .HasColumnType("varchar(30)");
+            builder.Property(x => x.ExpectedBehavior)
+                    .HasColumnType("varchar(255)")
+                    .IsRequired(false); 
+
+            builder.Property(x => x.StepsToReproduce)
+                    .HasColumnType("varchar(255)")
+                    .IsRequired(false);
+
+            builder.Property(x => x.ObservableBehavior)
+                    .HasColumnType("varchar(255)")
+                    .IsRequired(false);
 
             builder.Property(x => x.DeadLine)
                    .HasColumnType("date");
@@ -36,6 +49,9 @@ namespace ProjectManagement.Map
                     .HasMaxLength(30)
                     .HasConversion<string>()
                     .IsRequired();
+
+            builder.Property(x => x.CreatedDate)
+                    .HasColumnType("datetime");
 
         }
     }

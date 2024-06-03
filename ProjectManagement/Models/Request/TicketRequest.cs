@@ -8,7 +8,6 @@ namespace ProjectManagement.Models.Request
 
         public string Title {  get; set; }
 
-
         public TicketPriority Priority { get; set; }
 
         public TicketStatusEnum Status { get; set; }

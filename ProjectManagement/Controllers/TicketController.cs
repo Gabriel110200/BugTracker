@@ -8,6 +8,7 @@ using ProjectManagement.Models;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using ProjectManagement.Models.Request;
+using AutoMapper.Configuration.Annotations;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ProjectManagement.Controllers
@@ -17,18 +18,22 @@ namespace ProjectManagement.Controllers
     public class TicketController : ControllerBase
     {
         private ITicketService _ticket;
-        //private TicketRepository ticketRepository;
         private IUnitOfWork UnitOfWork;
+        public ITicketRepository TicketRepository { get; }
 
         public TicketController(ITicketService ticket, IUnitOfWork unitOfWork)
         {
             _ticket = ticket;
             UnitOfWork = unitOfWork;
+            this.TicketRepository = this.UnitOfWork.GetTicketRepository();
         }
 
         public static object CriaInstancia(string nome)
         {
             var assembly = Assembly.GetExecutingAssembly();
+
+            var teste = assembly.GetTypes();
+
             var type = assembly.GetTypes().FirstOrDefault(t => t.Name == nome);
 
             if (type == null)
@@ -47,7 +52,7 @@ namespace ProjectManagement.Controllers
             {
                 Title = request.Title,
                 DeadLine = request.DeadLine,
-                Message = request.Message,
+              //  Message = request.Message,
                 Priority = request.Priority,
                 Status = request.Status,
                 Type = request.Type,
@@ -60,12 +65,13 @@ namespace ProjectManagement.Controllers
         }
 
 
-        [HttpGet("GetTickets/{projectId}")]
+        [HttpGet("GetTickets/{projectId?}")]
 
-        public async Task<IActionResult> GetTickets()
+        public async Task<IActionResult> GetTickets(int? projectId = null)
         {
 
-            return Ok();
+            var projects = await this.TicketRepository.GetAsync();
+            return Ok(projects);
         }
 
 

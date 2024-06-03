@@ -22,8 +22,8 @@ namespace ProjectManagement.Controllers
 
         public IUnitOfWork UnitOfWork { get; }
         public IProjectRepository ProjectRepository { get; }
-
         public ICompanyRepository CompanyRepository { get; }
+
 
         public ProjectController(IUnitOfWork unitOfWork)
         {

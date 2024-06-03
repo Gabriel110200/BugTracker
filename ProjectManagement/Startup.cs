@@ -129,6 +129,7 @@ namespace ProjectManagement
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITicketService, TicketService>();
 
         }
 

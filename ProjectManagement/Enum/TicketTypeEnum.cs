@@ -11,7 +11,5 @@ namespace ProjectManagement.Enum
         [Description("Bug")]
         Bug = 1, 
 
-
-
     }
 }
