@@ -9,6 +9,8 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using ProjectManagement.Models.Request;
 using AutoMapper.Configuration.Annotations;
+using ProjectManagement.Data.Migrations;
+using System.Runtime.CompilerServices;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ProjectManagement.Controllers
@@ -17,51 +19,38 @@ namespace ProjectManagement.Controllers
     [ApiController]
     public class TicketController : ControllerBase
     {
-        private ITicketService _ticket;
         private IUnitOfWork UnitOfWork;
         public ITicketRepository TicketRepository { get; }
+        public ITicketServiceFactory TicketFactory { get; }
 
-        public TicketController(ITicketService ticket, IUnitOfWork unitOfWork)
+        public TicketController(IUnitOfWork unitOfWork, ITicketServiceFactory ticketFactory)
         {
-            _ticket = ticket;
             UnitOfWork = unitOfWork;
+            TicketFactory = ticketFactory;
             this.TicketRepository = this.UnitOfWork.GetTicketRepository();
         }
 
-        public static object CriaInstancia(string nome)
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-
-            var teste = assembly.GetTypes();
-
-            var type = assembly.GetTypes().FirstOrDefault(t => t.Name == nome);
-
-            if (type == null)
-            {
-                throw new Exception("Tipo de ticket não encontrado");
-            }
-            return Activator.CreateInstance(type);
-        }
 
 
         [HttpPost]
-        public void Create([FromQuery] string ticketType, TicketRequest request)
+        public async Task<IActionResult> Create(TicketRequest request)
         {
 
             var ticket = new Ticket()
             {
                 Title = request.Title,
                 DeadLine = request.DeadLine,
-              //  Message = request.Message,
+                Description = request.Message,
                 Priority = request.Priority,
                 Status = request.Status,
                 Type = request.Type,
                 ProjectId_FK = request.ProjectId_FK,
             };
 
-            ITicketService ticketService = (ITicketService)CriaInstancia(ticketType);
+            var service = this.TicketFactory.GetTicketService(ticket.Type);
+            await service.Create(ticket);
+            return Ok();
 
-            ticketService.Create(ticket);
         }
 
 
@@ -74,17 +63,6 @@ namespace ProjectManagement.Controllers
             return Ok(projects);
         }
 
-
-        [HttpGet]
-        public double teste(Project project,string ticketType)
-        {
-            ITicketService ticketService = (ITicketService)CriaInstancia(ticketType);
-
-            var mean = ticketService.UrgentPriorityArithmeticMean(project);
-
-            return mean;
-
-        }
 
     }
 }

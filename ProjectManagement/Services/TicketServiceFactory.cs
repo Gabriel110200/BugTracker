@@ -8,12 +8,12 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ProjectManagement.IServices;
 using Microsoft.Extensions.DependencyInjection;
+using ProjectManagement.Enum;
 
 namespace ProjectManagement.Services
 {
-    public class TicketServiceFactory
+    public class TicketServiceFactory : ITicketServiceFactory
     {
-
         private readonly IServiceProvider serviceProvider;
 
         public TicketServiceFactory(IServiceProvider serviceProvider)
@@ -21,14 +21,13 @@ namespace ProjectManagement.Services
             this.serviceProvider = serviceProvider;
         }
 
-
-        public ITicketService GetTicketService(string ticketType)
+        public ITicketService GetTicketService(TicketTypeEnum type)
         {
-            switch (ticketType)
+            switch (type)
             {
-                case "Bug":
+                case TicketTypeEnum.Bug:
                     return this.serviceProvider.GetService<TicketBugService>();
-                case "Feature":
+                case TicketTypeEnum.Feature:
                     return this.serviceProvider.GetService<TicketFeatureService>();
                 default:
                     throw new ArgumentException("Unsupported ticket type");

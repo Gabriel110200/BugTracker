@@ -33,7 +33,7 @@ namespace ProjectManagement.Map
                     .IsRequired(false);
 
             builder.Property(x => x.DeadLine)
-                   .HasColumnType("date");
+                   .HasColumnType("datetime");
 
             builder.Property(x => x.Priority)
                     .HasMaxLength(50)

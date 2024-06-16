@@ -28,7 +28,7 @@ namespace ProjectManagement.Models
 
         public string File { get; set; }
 
-        public DateTime DeadLine { get; set; }
+        public DateTime  DeadLine { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
