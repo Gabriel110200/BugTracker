@@ -29,9 +29,21 @@ namespace ProjectManagement.Services
         }
 
 
-        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null)
+        public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> filter = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> include = null)
         {
-            return await context.Set<TEntity>().ToListAsync();
+            IQueryable<TEntity> query = this.context.Set<TEntity>();
+
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<TEntity> GetByIdAsync(Guid id)
@@ -44,6 +56,11 @@ namespace ProjectManagement.Services
             context.Entry(entity).State = EntityState.Modified;
 
             context.Set<TEntity>().Update(entity);
+        }
+
+        public async Task CommitAsync()
+        {
+            await this.context.SaveChangesAsync(); 
         }
 
 

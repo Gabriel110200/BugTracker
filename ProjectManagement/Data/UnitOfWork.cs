@@ -14,6 +14,7 @@ namespace ProjectManagement.Data
 
         private ICompanyRepository _companyRepository;
         private IProjectRepository _projectRepository;
+        private IUserRepository _userRepository;
         private ITicketRepository _ticketRepository;
         private readonly Dictionary<Type, object> _repositories = new Dictionary<Type, object>();
 
@@ -68,6 +69,16 @@ namespace ProjectManagement.Data
             }
 
             return this._ticketRepository;
+        }
+
+        public IUserRepository GetUserRepository()
+        {
+            if (_userRepository == null)
+            {
+                _userRepository = new UserRepository(_context);
+            }
+
+            return this._userRepository;
         }
 
         public ICompanyRepository GetCompanyRepository()

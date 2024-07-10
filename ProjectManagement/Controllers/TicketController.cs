@@ -11,6 +11,7 @@ using ProjectManagement.Models.Request;
 using AutoMapper.Configuration.Annotations;
 using ProjectManagement.Data.Migrations;
 using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ProjectManagement.Controllers
@@ -36,6 +37,18 @@ namespace ProjectManagement.Controllers
         public async Task<IActionResult> Create(TicketRequest request)
         {
 
+            TicketCategory ticketCategory = null;
+
+            if (request.CategoryName != null)
+            {
+                ticketCategory = new TicketCategory()
+                {
+                    Name = request.CategoryName
+                };
+            }
+
+
+
             var ticket = new Ticket()
             {
                 Title = request.Title,
@@ -44,7 +57,12 @@ namespace ProjectManagement.Controllers
                 Priority = request.Priority,
                 Status = request.Status,
                 Type = request.Type,
-                ProjectId_FK = request.ProjectId_FK,
+                ExpectedBehavior = request.ExpectedBehavior,
+                ObservableBehavior = request.ObservableBehavior,
+                StepsToReproduce = request.StepsToReproduce,
+                ProjectId_FK = request.ProjectId,
+                CreatedDate = DateTime.Now,
+                Category = ticketCategory
             };
 
             var service = this.TicketFactory.GetTicketService(ticket.Type);
@@ -54,13 +72,33 @@ namespace ProjectManagement.Controllers
         }
 
 
-        [HttpGet("GetTickets/{projectId?}")]
+        [HttpGet()]
 
-        public async Task<IActionResult> GetTickets(int? projectId = null)
+        public async Task<IActionResult> GetTickets()
         {
-
             var projects = await this.TicketRepository.GetAsync();
             return Ok(projects);
+        }
+
+
+
+        [HttpGet("GetTickets/{projectId?}")]
+        public async Task<IActionResult> GetTickets(int? projectId = null)
+        {
+            var projects = await this.TicketRepository.GetAsync();
+            return Ok(projects);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTicket([FromRoute] Guid id)
+        {
+            var ticket = await this.TicketRepository.GetByIdAsync(id);
+            await this.TicketRepository.DeleteAsync(ticket);
+            await this.UnitOfWork.Commit();
+
+            return Ok("Registro removido com sucesso");
+
+
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -9,7 +10,7 @@ namespace ProjectManagement.IServices
     {
 
 
-        Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity,bool>> filter = null);
+        Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity,bool>> filter = null, Func<IQueryable<TEntity>, IQueryable<TEntity>> include = null);
 
         Task<TEntity> GetByIdAsync(Guid id);
 
@@ -17,7 +18,9 @@ namespace ProjectManagement.IServices
 
         Task DeleteAsync(TEntity entity);
 
-        Task UpdateAsync(TEntity entity); 
+        Task UpdateAsync(TEntity entity);
+
+        Task CommitAsync();
 
 
 

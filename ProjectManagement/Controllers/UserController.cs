@@ -20,15 +20,17 @@ namespace ProjectManagement.Controllers
     public class UserController : Controller
     {
         private readonly ICompanyRepository companyRepository;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly IUnitOfWork unitOfWork;
         private IUserService UserService;
 
-        public UserController(IUserService userService, ICompanyRepository companyRepository, IUnitOfWork unitOfWork)
+        public UserController(IUserService userService, ICompanyRepository companyRepository, IUnitOfWork unitOfWork, UserManager<IdentityUser> userManager)
         {
             UserService = userService;
             this.companyRepository = companyRepository;
             this.unitOfWork = unitOfWork;
+            _userManager = userManager;
         }
 
 
@@ -52,14 +54,21 @@ namespace ProjectManagement.Controllers
                     if (wasUserRegistered.Succeeded)
                     {
 
-                        var company = new CompanyRequest()
+                        if (request.CNPJ == null)
                         {
-                            CNPJ = request.CNPJ,
-                            Name = request.CompanyName,
-                            UserId = iUser.Id
-                        };
 
-                        await this.CreateCompany(company);
+
+                            var company = new CompanyRequest()
+                            {
+                                CNPJ = request.CNPJ,
+                                Name = request.CompanyName,
+                                UserId = iUser.Id
+                            };
+
+                            await this.CreateCompany(company);
+
+                        }
+
 
                         await this.unitOfWork.Commit();
                         transaction.Commit();
@@ -76,6 +85,21 @@ namespace ProjectManagement.Controllers
             {
                 throw ex;
             }
+
+        }
+
+
+        [HttpGet("")]
+
+        public async Task<IActionResult> GetUsers()
+        {
+
+            var userRepo = this.unitOfWork.GetUserRepository();
+
+
+            var users = await userRepo.GetUsers();
+
+            return Ok(users);
 
         }
 
@@ -117,7 +141,7 @@ namespace ProjectManagement.Controllers
 
             var result = await this.UserService.SignIn(request);
 
-            var jwtToken = this.GenerateJwtToken(request.Mail);
+            var jwtToken = this.GenerateJwtToken(result.User);
 
             if (result.Result.Succeeded)
             {
@@ -138,7 +162,7 @@ namespace ProjectManagement.Controllers
 
         }
 
-        private string GenerateJwtToken(string username)
+        private async Task<string> GenerateJwtToken(IdentityUser user)
         {
 
             string key = "this is my custom Secret key for authentication"; // Your key as a string
@@ -146,8 +170,10 @@ namespace ProjectManagement.Controllers
             var securityKey = new SymmetricSecurityKey(keyBytes);
             var creds = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            //   var roles = await this._userManager.GetRolesAsync(user);
+
             var token = new JwtSecurityToken(
-                claims: new[] { new Claim(ClaimTypes.Name, username) },
+                claims: new[] { new Claim(ClaimTypes.Name, user.UserName) },
                 expires: DateTime.Now.AddMinutes(90),
                 signingCredentials: creds
             );

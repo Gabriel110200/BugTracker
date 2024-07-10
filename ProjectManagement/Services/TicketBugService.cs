@@ -24,8 +24,8 @@ namespace ProjectManagement.Services
         public async override Task<bool> Create(Ticket ticket)
         {
 
-            if (this._context.Tickets.Any(x => x.Title == ticket.Title))
-                throw new Exception("Feature já registrada");
+            if (this._context.Tickets.Any(x => x.Title == ticket.Title && x.Type == Enum.TicketTypeEnum.Bug && x.Status != Enum.TicketStatusEnum.Done))
+                throw new Exception("Bug já registrad e não finalizado");
 
 
             this._context.Tickets.Add(ticket);

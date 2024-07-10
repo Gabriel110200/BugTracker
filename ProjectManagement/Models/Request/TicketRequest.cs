@@ -16,12 +16,21 @@ namespace ProjectManagement.Models.Request
         public TicketTypeEnum Type { get; set; }
 
 
+        public string? ObservableBehavior { get; set; }
+
+        public string? ExpectedBehavior { get; set; }
+
+        public string? StepsToReproduce { get; set; }
+
+
         public string Message { get; set; }
 
         public DateTime DeadLine { get; set; }
 
+        public string? CategoryName {  get; set; }
 
-        public Guid ProjectId_FK { get; set; }
+
+        public Guid ProjectId { get; set; }
 
 
     }

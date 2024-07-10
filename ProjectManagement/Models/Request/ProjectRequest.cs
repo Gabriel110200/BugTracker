@@ -17,7 +17,6 @@ namespace ProjectManagement.Models.Request
 
         public string Image {  get; set; }
 
-        public Guid CompanyID { get; set; }
 
 
     }

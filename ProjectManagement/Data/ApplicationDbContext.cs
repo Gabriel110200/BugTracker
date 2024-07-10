@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ProjectManagement.Map;
 using ProjectManagement.Models;
@@ -16,11 +17,13 @@ namespace ProjectManagement.Data
 
         public DbSet<Team> Teams { get; set; }
 
-        public DbSet<Project> Projects { get; set; }  
+        public DbSet<Project> Projects { get; set; }
+
+        public DbSet<IdentityUserRole<string>> UserRoles { get; set; }
 
         public DbSet<Ticket> Tickets { get; set; }
 
-       // public DbSet<User> Users { get; set; }
+        public DbSet<IdentityUser> Users { get; set; }
 
       //  public DbSet<UserCompany> userCompanies { get; set; }
 
