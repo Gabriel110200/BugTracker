@@ -8,7 +8,7 @@ Na documentação é possível encontrar a modelagem de dados,umls e requisitos 
 
 
 Tecnologias e padrões usados: 
- - .NET 3.1 
+ - .NET 5
  - C# 
  - TDD 
  - Entity framework core
